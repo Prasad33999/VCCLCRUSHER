@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CrusherOS · Vensar Constructions</title>
+<title>Crusher · Vensar Constructions</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -387,7 +387,7 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 <!-- LOADING SCREEN -->
 <div id="loadingScreen">
   <div class="ld-logo">CP</div>
-  <div class="ld-text">CrusherOS</div>
+  <div class="ld-text">Crusher</div>
   <div class="ld-sub" id="ldSub">Initialising...</div>
   <div class="ld-spin"></div>
 </div>
@@ -396,13 +396,13 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 <div id="loginWrap" class="gone">
   <div class="lbox">
     <div class="l-logo">CP</div>
-    <div class="l-brand">CrusherOS</div>
+    <div class="l-brand">Crusher</div>
     <div class="l-sub">Vensar Constructions · NF Railway Manipur</div>
     <div class="lf"><label>Select User</label><div class="lf-r"><select id="lu"><option value="">— Choose user —</option><option value="Manager">Manager</option><option value="Employee">Employee</option></select></div></div>
     <div class="lf"><label>Password</label><div class="lf-r"><input type="password" id="lp" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"><button class="pw-btn" onclick="togglePw()" id="pwBtn">👁</button></div></div>
     <button class="l-btn" onclick="doLogin()">Sign In →</button>
     <div class="l-err" id="lerr"></div>
-    <div class="l-foot">🔐 Manager: VCCL &nbsp;·&nbsp; Employee: VCCL123 &nbsp;·&nbsp; ☁ Supabase Cloud</div>
+    <div class="l-foot">🔐 This page is secured with 256-Bit Encryption &nbsp;·&nbsp; ☁ Supabase Cloud</div>
   </div>
 </div>
 
@@ -411,7 +411,7 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 
 <!-- TOPBAR -->
 <div class="topbar" id="topbar" style="display:none;">
-  <div class="tb-l"><div class="tb-ic">CP</div><div><div class="tb-name">CrusherOS</div><div class="tb-sub">NF Railway Tunnel — Manipur</div></div></div>
+  <div class="tb-l"><div class="tb-ic">CP</div><div><div class="tb-name">Crusher</div><div class="tb-sub">NF Railway Tunnel — Manipur</div></div></div>
   <nav class="tb-nav" id="nav"></nav>
   <div class="tb-r">
     <span class="tb-dt" id="topDt"></span>
@@ -1244,7 +1244,7 @@ function buildOfficialPDF(rec,periodFrom,rptDate,cumTot,cumBoulder,sb2,site,prep
 
     // ── FOOTER ──
     doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(120,130,160);
-    doc.text('CrusherOS · Vensar Constructions Pvt Ltd · CONFIDENTIAL',ML+2,PH-MT-1);
+    doc.text('Crusher · Vensar Constructions Pvt Ltd · CONFIDENTIAL',ML+2,PH-MT-1);
     doc.text('Generated: '+new Date().toLocaleString('en-IN'),PW-ML,PH-MT-1,{align:'right'});
 
     doc.save('OfficialReport_'+rptDate+'_'+site+'.pdf');
@@ -1267,7 +1267,7 @@ function expSingle(id){
     const W=210,M=14;
 
     function hdr(){doc.setFillColor(8,13,24);doc.rect(0,0,W,30,'F');doc.setFillColor(245,166,35);doc.rect(0,0,5,30,'F');doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(245,166,35);doc.text('CRUSHER PLANT DAILY REPORT',M+4,12);doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,160,180);doc.text('Vensar Constructions Pvt Ltd · NF Railway Tunnel, Manipur',M+4,19);doc.text('Report ID: '+r.id,W-M,19,{align:'right'});}
-    function ftr(){const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}}
+    function ftr(){const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · Crusher · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}}
     function sec(t,y){if(y>264){doc.addPage();hdr();y=34;}doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(245,166,35);doc.text(t.toUpperCase(),M+5,y+0.5);return y+11;}
     function kv(k,v,x1,x2,y){if(y>272){doc.addPage();hdr();y=34;}doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(100,100,130);doc.text(String(k)+':',x1,y);doc.setFont('helvetica','normal');doc.setTextColor(30,30,45);const ls=doc.splitTextToSize(String(v||'—'),x2-x1);ls.forEach((l,i)=>doc.text(l,x2,y+i*5));return y+Math.max(1,ls.length)*5+2;}
     function trow(cells,widths,y,bg,bold){if(y>272){doc.addPage();hdr();y=34;}if(bg){doc.setFillColor(bg[0],bg[1],bg[2]);doc.rect(M,y-4,W-M*2,7,'F');}let x=M;cells.forEach((v,i)=>{doc.setFont('helvetica',bold?'bold':'normal');doc.setFontSize(9.5);doc.setTextColor(bold&&i===0?[180,110,0]:[40,40,55]);doc.text(String(v||'0'),x+widths[i]/2,y+1,{align:'center'});x+=widths[i];});return y+7;}
@@ -1367,7 +1367,7 @@ function expDashPDF(){
     doc.setFillColor(235,240,255);doc.rect(M,y-4,W-M*2,7,'F');
     ['Date','Today MT','Sand','10mm','20mm','HSD (L)','Status'].forEach((h,i)=>{doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(60,60,80);doc.text(String(h),M+tW*i+tW/2,y,{align:'center'});});y+=5;
     reports.slice(0,25).forEach((r,ri)=>{if(y>274){doc.addPage();y=20;}if(ri%2===0){doc.setFillColor(248,250,255);doc.rect(M,y-4,W-M*2,7,'F');}[fd(r.date),r.production.total.toFixed(1),r.production.sand.toFixed(1),r.production['10mm'].toFixed(1),r.production['20mm'].toFixed(1),r.hsd.toLocaleString(),SLBL[r.plantStatus]].forEach((v,i)=>{doc.setFont('helvetica',i===1?'bold':'normal');doc.setFontSize(9);doc.setTextColor(i===1?[180,110,0]:[40,40,55]);doc.text(String(v||''),M+tW*i+tW/2,y+1,{align:'center'});});y+=6;});
-    const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}
+    const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · Crusher · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}
     doc.save('Dashboard_Report.pdf');toast('📄 Dashboard PDF ready!','tok');
   }catch(e){console.error('DashPDF:',e);toast('PDF Error: '+e.message,'ter');}
 }
@@ -1389,7 +1389,7 @@ function expRptPDF(){
       doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(245,166,35);doc.text(String(key),M+5,y+0.5);doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,140,80);doc.text(g.length+' days · '+Math.round(tot).toLocaleString()+' MT · '+Math.round(avg)+'/day · '+fpm.toFixed(2)+' L/MT',W-M,y+0.5,{align:'right'});y+=10;
       g.sort((a,b)=>b.date.localeCompare(a.date)).forEach(r=>{if(y>274){doc.addPage();y=20;}doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(40,40,60);doc.text(fd(r.date),M,y);doc.setFont('helvetica','normal');doc.setTextColor(180,110,0);doc.text(r.production.total.toFixed(1)+' MT',M+36,y);doc.setTextColor(60,60,80);doc.text('HSD:'+r.hsd+'L',M+64,y);doc.text(SLBL[r.plantStatus]||'',M+88,y);if(r.remarks){doc.setTextColor(110,110,130);doc.text(r.remarks.substring(0,45)+(r.remarks.length>45?'...':''),M+118,y);}y+=6;});y+=7;
     });
-    const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}
+    const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · Crusher · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}
     doc.save(period+'_report.pdf');toast('📄 Report PDF ready!','tok');
   }catch(e){console.error('RptPDF:',e);toast('PDF Error: '+e.message,'ter');}
 }
