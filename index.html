@@ -3,168 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Crusher · Vensar Constructions</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>CrusherOS · Vensar Constructions</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-/* ───────────────────────────── TOKENS ───────────────────────────── */
-:root {
-  --bg:       #06090f;
-  --bg2:      #0a0f1c;
-  --sur:      #101828;
-  --sur2:     #162035;
-  --sur3:     #1c2940;
-  --bd:       rgba(255,255,255,0.08);
-  --bd2:      rgba(255,255,255,0.15);
-  --shine:    rgba(255,255,255,0.22);
-  --gold:     #f5a623;
-  --gold2:    #ffc154;
-  --glow:     rgba(245,166,35,0.28);
-  --green:    #2dd57a;
-  --red:      #ff5252;
-  --blue:     #4a9eff;
-  --purple:   #b57bee;
-  --t1:  #eef2ff;
-  --t2:  #9baacf;
-  --t3:  #4d6080;
-  --t4:  rgba(155,170,207,0.18);
-  --f:   'Plus Jakarta Sans',sans-serif;
-  --m:   'JetBrains Mono',monospace;
-  --r1:8px; --r2:14px; --r3:22px;
-  --ease:  cubic-bezier(0.25,0.46,0.45,0.94);
-  --spring:cubic-bezier(0.34,1.56,0.64,1);
-  --bounce:cubic-bezier(0.16,1,0.30,1);
-  --sh:  0 4px 24px rgba(0,0,0,0.55);
-  --sh2: 0 16px 56px rgba(0,0,0,0.70);
+:root{
+  --bg:#060b15;--bg2:#0b1221;--sur:#111c30;--sur2:#172238;--sur3:#1d2a44;
+  --bd:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.16);--shine:rgba(255,255,255,0.20);
+  --gold:#f5a623;--gold2:#ffc154;--glow:rgba(245,166,35,0.28);
+  --green:#2dd57a;--red:#ff5252;--blue:#4a9eff;--purple:#b57bee;
+  --t1:#eef2ff;--t2:#9baacf;--t3:#4d6080;--t4:rgba(155,170,207,0.15);
+  --f:'Plus Jakarta Sans',sans-serif;--m:'JetBrains Mono',monospace;
+  --r1:8px;--r2:14px;--r3:22px;
+  --ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);--bounce:cubic-bezier(.16,1,.3,1);
+  --sh:0 4px 24px rgba(0,0,0,.55);--sh2:0 16px 56px rgba(0,0,0,.70);
 }
-[data-theme="light"] {
-  --bg:  #dfe4f0; --bg2: #d4daea; --sur: #f4f6fd;
-  --sur2:#eef1fb; --sur3:#ffffff;
-  --bd:  rgba(30,50,100,0.10); --bd2:rgba(30,50,100,0.18);
-  --shine:rgba(255,255,255,0.9);
-  --t1:#0c1326; --t2:#2e3f60; --t3:#6b7fa8; --t4:rgba(30,50,100,0.10);
-  --sh:0 4px 20px rgba(30,50,100,0.12); --sh2:0 16px 48px rgba(30,50,100,0.18);
+[data-theme="light"]{
+  --bg:#dde3f2;--bg2:#d2d9ec;--sur:#f3f6fe;--sur2:#edf1fc;--sur3:#ffffff;
+  --bd:rgba(20,40,100,.09);--bd2:rgba(20,40,100,.18);--shine:rgba(255,255,255,.90);
+  --t1:#0b1326;--t2:#2a3c60;--t3:#5a7090;--t4:rgba(20,40,100,.10);
+  --sh:0 4px 20px rgba(20,40,100,.12);--sh2:0 16px 48px rgba(20,40,100,.18);
 }
-
-/* ───────────────────────────── RESET ───────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
 body{background:var(--bg);color:var(--t1);font-family:var(--f);font-size:14px;min-height:100vh;overflow-x:hidden;}
 button{cursor:pointer;font-family:var(--f);}
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px;}
-::selection{background:rgba(245,166,35,0.25);color:var(--t1);}
+::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px;}
+::selection{background:rgba(245,166,35,.25);color:var(--t1);}
 
-/* ─────────────────────────── ANIMATIONS ──────────────────────────── */
-@keyframes fadeUp  {from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes fadeIn  {from{opacity:0}to{opacity:1}}
-@keyframes scaleIn {from{opacity:0;transform:scale(.88) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
-@keyframes modalIn {from{opacity:0;transform:translateY(28px) scale(.93)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes toastIn {from{opacity:0;transform:translateX(110%)}to{opacity:1;transform:translateX(0)}}
-@keyframes spin    {to{transform:rotate(360deg)}}
-@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(24px,-32px)}66%{transform:translate(-16px,18px)}}
-@keyframes glossShimmer{0%{background-position:-300% 0}100%{background-position:300% 0}}
-@keyframes cardGlow{0%,100%{box-shadow:var(--sh)}50%{box-shadow:0 8px 40px rgba(245,166,35,0.18),var(--sh)}}
-@keyframes countUp {from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.8);opacity:.5}}
-@keyframes barFill {from{width:0}to{width:var(--w)}}
-@keyframes milePop {from{opacity:0;transform:scale(.8) translateX(-20px)}to{opacity:1;transform:scale(1) translateX(0)}}
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(.93)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastIn{from{opacity:0;transform:translateX(110%)}to{opacity:1;transform:translateX(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(20px,-28px)}66%{transform:translate(-14px,16px)}}
+@keyframes glossSweep{0%{background-position:-300% 0}100%{background-position:300% 0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes syncPulse{0%,100%{box-shadow:0 0 0 0 rgba(74,158,255,.4)}70%{box-shadow:0 0 0 8px rgba(74,158,255,0)}}
 
-/* ─────────────────────── BACKGROUND MESH ───────────────────────── */
+/* ── LOADING OVERLAY ── */
+#loadingScreen{position:fixed;inset:0;z-index:9500;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .4s;}
+#loadingScreen.out{opacity:0;pointer-events:none;}
+#loadingScreen.gone{display:none;}
+.ld-logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--gold),#c77e0a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;color:#000;box-shadow:0 8px 24px var(--glow);}
+.ld-text{font-size:18px;font-weight:800;color:var(--t1);}
+.ld-sub{font-family:var(--m);font-size:12px;color:var(--t3);letter-spacing:1px;}
+.ld-spin{width:28px;height:28px;border:3px solid rgba(245,166,35,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+
+/* ── BG MESH ── */
 .bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
 .orb{position:absolute;border-radius:50%;filter:blur(88px);animation:orbFloat var(--d,14s) ease-in-out infinite;animation-delay:var(--dl,0s);}
 
-/* ─────────────────────────── LOGIN ────────────────────────────── */
-#loginWrap{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .45s var(--ease);}
+/* ── LOGIN ── */
+#loginWrap{position:fixed;inset:0;z-index:8000;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .45s var(--ease);}
 #loginWrap.out{opacity:0;pointer-events:none;}
 #loginWrap.gone{display:none;}
-
-.lbox{
-  width:410px;padding:46px 42px 50px;
-  background:linear-gradient(160deg,var(--sur),var(--sur2));
-  border:1px solid var(--bd2);border-radius:28px;
-  box-shadow:var(--sh2),inset 0 1px 0 var(--shine),0 0 80px rgba(245,166,35,0.06);
-  animation:scaleIn .55s var(--spring) both;
-  position:relative;overflow:hidden;z-index:1;
-}
-.lbox::before{
-  content:'';position:absolute;top:-60px;right:-60px;
-  width:220px;height:220px;border-radius:50%;
-  background:radial-gradient(circle,rgba(245,166,35,0.10),transparent 70%);
-  pointer-events:none;
-}
-/* Glossy shimmer strip on card */
-.lbox::after{
-  content:'';position:absolute;inset:0;border-radius:28px;
-  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.04) 50%,transparent 60%);
-  background-size:300% 100%;
-  animation:glossShimmer 4s linear infinite;
-  pointer-events:none;
-}
-.l-logo{width:50px;height:50px;border-radius:13px;background:linear-gradient(135deg,var(--gold),#c77e0a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#000;box-shadow:0 6px 22px var(--glow),inset 0 1px 0 rgba(255,255,255,0.3);margin-bottom:26px;}
+.lbox{width:420px;padding:46px 42px 50px;background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd2);border-radius:28px;box-shadow:var(--sh2),inset 0 1px 0 var(--shine);animation:scaleIn .5s var(--spring) both;position:relative;overflow:hidden;z-index:1;}
+.lbox::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.025) 50%,transparent 60%);background-size:300%;animation:glossSweep 5s linear infinite;pointer-events:none;}
+.l-logo{width:50px;height:50px;border-radius:13px;background:linear-gradient(135deg,var(--gold),#c77e0a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#000;box-shadow:0 6px 22px var(--glow),inset 0 1px 0 rgba(255,255,255,.3);margin-bottom:24px;}
 .l-brand{font-size:22px;font-weight:800;color:var(--t1);letter-spacing:-.4px;margin-bottom:3px;}
-.l-sub{font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:1.3px;text-transform:uppercase;margin-bottom:32px;}
-.lf{margin-bottom:15px;}
-.lf label{display:block;font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:1.4px;text-transform:uppercase;margin-bottom:7px;font-weight:500;}
+.l-sub{font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:1.3px;text-transform:uppercase;margin-bottom:30px;}
+.lf{margin-bottom:14px;}
+.lf label{display:block;font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:1.4px;text-transform:uppercase;margin-bottom:6px;font-weight:500;}
 .lf-r{position:relative;}
-.lf input,.lf select{
-  width:100%;background:var(--bg2);border:1.5px solid var(--bd);
-  border-radius:10px;color:var(--t1);font-family:var(--f);font-size:14px;font-weight:500;
-  padding:12px 15px;outline:none;-webkit-appearance:none;
-  transition:border-color .2s,box-shadow .2s,background .2s;
-}
+.lf input,.lf select{width:100%;background:var(--bg2);border:1.5px solid var(--bd);border-radius:10px;color:var(--t1);font-family:var(--f);font-size:14px;font-weight:500;padding:12px 15px;outline:none;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
 .lf select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234d6080' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:38px;}
 .lf select option{background:var(--sur);}
-.lf input:focus,.lf select:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,166,35,0.11);}
+.lf input:focus,.lf select:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,166,35,.10);}
 .lf input::placeholder{color:var(--t3);}
 .pw-btn{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--t3);font-size:15px;transition:color .2s;padding:3px;}
 .pw-btn:hover{color:var(--t2);}
-.l-btn{
-  width:100%;margin-top:8px;padding:13px;border:none;border-radius:10px;
-  background:linear-gradient(135deg,var(--gold),#c77e0a);
-  color:#000;font-family:var(--f);font-size:14px;font-weight:800;
-  letter-spacing:.1px;position:relative;overflow:hidden;
-  box-shadow:0 6px 20px var(--glow),inset 0 1px 0 rgba(255,255,255,0.25);
-  transition:transform .2s var(--spring),box-shadow .2s;
-}
-.l-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);background-size:200%;opacity:0;transition:opacity .3s;}
-.l-btn:hover::after{opacity:1;animation:glossShimmer 1s ease;}
+.l-btn{width:100%;margin-top:8px;padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--gold),#c77e0a);color:#000;font-family:var(--f);font-size:14px;font-weight:800;box-shadow:0 6px 20px var(--glow),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .2s var(--spring),box-shadow .2s;}
 .l-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px var(--glow);}
 .l-btn:active{transform:scale(.97);}
-.l-err{display:none;margin-top:11px;font-family:var(--m);font-size:11px;color:var(--red);background:rgba(255,82,82,0.08);border:1px solid rgba(255,82,82,0.22);border-radius:8px;padding:9px 13px;text-align:center;animation:fadeUp .25s var(--bounce);}
-.l-foot{margin-top:22px;text-align:center;font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:.3px;}
+.l-err{display:none;margin-top:11px;font-family:var(--m);font-size:11px;color:var(--red);background:rgba(255,82,82,.08);border:1px solid rgba(255,82,82,.22);border-radius:8px;padding:9px 13px;text-align:center;animation:fadeUp .25s var(--bounce);}
+.l-foot{margin-top:22px;text-align:center;font-family:var(--m);font-size:10px;color:var(--t3);}
 
-/* ─────────────────────────── TOPBAR ────────────────────────────── */
-.topbar{
-  height:58px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 26px;position:sticky;top:0;z-index:300;
-  background:var(--sur);border-bottom:1px solid var(--bd);
-  box-shadow:var(--sh);
-  /* Glossy top highlight */
-  box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,0.06);
-}
+/* ── TOPBAR ── */
+.topbar{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:300;background:var(--sur);border-bottom:1px solid var(--bd);box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,.05);}
 .tb-l{display:flex;align-items:center;gap:11px;}
-.tb-ic{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold),#c77e0a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#000;box-shadow:0 3px 12px var(--glow),inset 0 1px 0 rgba(255,255,255,0.3);transition:transform .25s var(--spring);}
+.tb-ic{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold),#c77e0a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#000;box-shadow:0 3px 12px var(--glow);transition:transform .25s var(--spring);}
 .tb-ic:hover{transform:scale(1.08) rotate(-3deg);}
 .tb-name{font-size:15px;font-weight:800;color:var(--t1);letter-spacing:-.25px;}
 .tb-sub{font-family:var(--m);font-size:9px;color:var(--t3);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px;}
 .tb-nav{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--bd);border-radius:11px;padding:3px;}
 .nt{padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;color:var(--t3);border:1px solid transparent;cursor:pointer;transition:all .22s var(--bounce);white-space:nowrap;}
-.nt:hover{color:var(--t2);background:rgba(255,255,255,0.04);}
-.nt.active{color:var(--gold);background:rgba(245,166,35,0.10);border-color:rgba(245,166,35,0.22);font-weight:700;}
+.nt:hover{color:var(--t2);background:rgba(255,255,255,.04);}
+.nt.active{color:var(--gold);background:rgba(245,166,35,.10);border-color:rgba(245,166,35,.22);font-weight:700;}
 .tb-r{display:flex;align-items:center;gap:8px;}
 .tb-dt{font-family:var(--m);font-size:11px;color:var(--t3);}
 .tb-usr{font-size:12px;font-weight:700;background:var(--sur2);border:1px solid var(--bd);border-radius:8px;padding:5px 12px;color:var(--t2);}
 .tb-usr b{color:var(--gold);}
+/* Sync indicator */
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;}
+.sync-dot.syncing{background:var(--gold);animation:blink .8s ease-in-out infinite;}
+.sync-dot.error{background:var(--red);}
+.sync-badge{font-family:var(--m);font-size:10px;font-weight:600;background:var(--sur2);border:1px solid var(--bd);border-radius:7px;padding:4px 10px;color:var(--t3);display:flex;align-items:center;gap:5px;}
 .ib{width:34px;height:34px;border:1px solid var(--bd);background:var(--sur2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t2);transition:all .2s var(--spring);}
 .ib:hover{background:var(--sur3);color:var(--t1);border-color:var(--bd2);transform:scale(1.06);}
 .ib:active{transform:scale(.93);}
-/* Session progress bar */
 .sbar{height:2px;position:fixed;top:58px;left:0;right:0;z-index:299;}
 .sbar-f{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;box-shadow:0 0 8px var(--glow);transition:width 1s linear;}
 
-/* ─────────────────────────── LAYOUT ────────────────────────────── */
+/* ── LAYOUT ── */
 #app{position:relative;z-index:1;}
 .main{padding:26px 28px;max-width:1440px;margin:0 auto;}
 .page{display:none;}
@@ -174,23 +118,15 @@ button{cursor:pointer;font-family:var(--f);}
 .sh-title{font-size:26px;font-weight:800;color:var(--t1);letter-spacing:-.5px;}
 .sh-ac{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 
-/* ─────────────────────────── GLASS CARD ───────────────────────── */
-.gc{
-  background:linear-gradient(160deg,var(--sur),var(--sur2));
-  border:1px solid var(--bd);border-radius:var(--r3);padding:22px 24px;
-  margin-bottom:14px;
-  box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,0.05);
-  position:relative;overflow:hidden;
-  transition:border-color .25s,box-shadow .25s,transform .25s var(--spring);
-  animation:fadeUp .4s var(--bounce) both;
-}
-.gc::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.025) 50%,transparent 60%);background-size:300%;animation:glossShimmer 5s linear infinite;pointer-events:none;}
-.gc:hover{border-color:var(--bd2);box-shadow:0 8px 36px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.08);}
-.gc.tilt:hover{transform:perspective(900px) rotateX(-1deg) rotateY(1deg) scale(1.004);}
+/* ── GLASS CARD ── */
+.gc{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r3);padding:22px 24px;margin-bottom:14px;box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,.05);position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s,transform .25s var(--spring);animation:fadeUp .4s var(--bounce) both;}
+.gc::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.025) 50%,transparent 60%);background-size:300%;animation:glossSweep 6s linear infinite;pointer-events:none;}
+.gc:hover{border-color:var(--bd2);box-shadow:0 8px 36px rgba(0,0,0,.5);}
+.gc.tilt:hover{transform:perspective(900px) rotateX(-1deg) rotateY(1deg) scale(1.003);}
 .gc-ttl{font-family:var(--m);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
 .gc-ttl::after{content:'';flex:1;height:1px;background:var(--bd);}
 
-/* ─────────────────────────── FORM ─────────────────────────────── */
+/* ── FORM ── */
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;}
 .fg3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:11px;}
 .fg4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;}
@@ -198,128 +134,105 @@ button{cursor:pointer;font-family:var(--f);}
 .fgf{grid-column:1/-1;}
 .slb{font-size:12px;font-weight:700;color:var(--t2);margin-bottom:9px;}
 .fl{display:block;font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px;font-weight:500;}
-input[type=text],input[type=number],input[type=date],select,textarea{
-  width:100%;background:var(--bg2);border:1.5px solid var(--bd);
-  border-radius:9px;color:var(--t1);font-family:var(--f);font-size:13px;font-weight:500;
-  padding:9px 13px;outline:none;-webkit-appearance:none;
-  transition:border-color .2s,box-shadow .2s;
-}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;background:var(--bg2);border:1.5px solid var(--bd);border-radius:9px;color:var(--t1);font-family:var(--f);font-size:13px;font-weight:500;padding:9px 13px;outline:none;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234d6080' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
-[data-theme="light"] select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7fa8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");}
+[data-theme="light"] select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7090' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");}
 select option{background:var(--sur);}
-input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,166,35,0.09);}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,166,35,.09);}
 input::placeholder,textarea::placeholder{color:var(--t3);}
 textarea{resize:vertical;min-height:78px;line-height:1.6;}
 .fu{position:relative;}
 .fu input{padding-right:40px;}
 .fu-t{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-family:var(--m);font-size:10px;color:var(--t3);pointer-events:none;font-weight:500;}
-.tot-s{background:linear-gradient(135deg,rgba(245,166,35,0.09),rgba(245,166,35,0.03));border:1px solid rgba(245,166,35,0.22);border-radius:11px;padding:13px 18px;display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.tot-s{background:linear-gradient(135deg,rgba(245,166,35,.09),rgba(245,166,35,.03));border:1px solid rgba(245,166,35,.22);border-radius:11px;padding:13px 18px;display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
 .tot-l{font-family:var(--m);font-size:10px;color:var(--t2);letter-spacing:1px;text-transform:uppercase;}
 .tot-v{font-size:26px;font-weight:800;color:var(--gold);letter-spacing:-.5px;}
-.dup-w{display:none;padding:9px 13px;border-radius:9px;margin-top:9px;font-size:12px;font-family:var(--m);font-weight:500;color:var(--red);background:rgba(255,82,82,0.08);border:1px solid rgba(255,82,82,0.22);animation:fadeUp .2s var(--bounce);}
-.edt-bar{display:none;background:rgba(74,158,255,0.07);border:1px solid rgba(74,158,255,0.22);border-radius:var(--r2);padding:13px 18px;margin-bottom:15px;align-items:center;justify-content:space-between;gap:12px;}
+.dup-w{display:none;padding:9px 13px;border-radius:9px;margin-top:9px;font-size:12px;font-family:var(--m);font-weight:500;color:var(--red);background:rgba(255,82,82,.08);border:1px solid rgba(255,82,82,.22);}
+.edt-bar{display:none;background:rgba(74,158,255,.07);border:1px solid rgba(74,158,255,.22);border-radius:var(--r2);padding:13px 18px;margin-bottom:15px;align-items:center;justify-content:space-between;gap:12px;}
 .edt-bar.show{display:flex;animation:fadeUp .3s var(--bounce);}
 .edt-ttl{font-size:14px;font-weight:700;color:var(--blue);}
 .edt-sub{font-size:12px;color:var(--t2);margin-top:2px;}
-
-/* Mat shifted table */
 .mat-w{overflow-x:auto;border-radius:11px;border:1px solid var(--bd);}
 .mat{width:100%;border-collapse:collapse;}
 .mat th{font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;padding:9px 11px;background:var(--bg2);border-bottom:1px solid var(--bd);font-weight:600;}
 .mat td{border-bottom:1px solid var(--bd);padding:2px 3px;}
 .mat tbody tr:last-child td{border-bottom:none;}
 .mat td input{border:none;background:transparent;padding:7px 8px;font-size:12px;border-right:1px solid var(--bd);width:100%;transition:background .15s;}
-.mat td input:focus{background:rgba(245,166,35,0.05);}
+.mat td input:focus{background:rgba(245,166,35,.05);}
 .mat td:last-child input{border-right:none;}
-.mat-lb{font-family:var(--m);font-size:11px;font-weight:700;color:var(--gold);padding:8px 11px!important;background:rgba(245,166,35,0.04);border-right:1px solid var(--bd);white-space:nowrap;min-width:75px;}
-.mat-tt{font-family:var(--m);font-size:12px;font-weight:700;color:var(--gold);padding:8px 11px!important;text-align:right;background:rgba(245,166,35,0.04);}
+.mat-lb{font-family:var(--m);font-size:11px;font-weight:700;color:var(--gold);padding:8px 11px!important;background:rgba(245,166,35,.04);border-right:1px solid var(--bd);white-space:nowrap;min-width:75px;}
+.mat-tt{font-family:var(--m);font-size:12px;font-weight:700;color:var(--gold);padding:8px 11px!important;text-align:right;background:rgba(245,166,35,.04);}
 
-/* ─────────────────────────── BUTTONS ───────────────────────────── */
-.btn{padding:9px 18px;border-radius:9px;border:1px solid var(--bd2);font-family:var(--f);font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:all .2s var(--bounce);position:relative;overflow:hidden;}
-.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .2s;}
-.btn:hover::after{background:rgba(255,255,255,0.05);}
+/* ── BUTTONS ── */
+.btn{padding:9px 18px;border-radius:9px;border:1px solid var(--bd2);font-family:var(--f);font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:all .2s var(--bounce);}
 .btn:active{transform:scale(.96);}
-.bp{background:linear-gradient(135deg,var(--gold),#c77e0a);color:#000;border-color:transparent;box-shadow:0 5px 18px var(--glow),inset 0 1px 0 rgba(255,255,255,0.25);}
+.bp{background:linear-gradient(135deg,var(--gold),#c77e0a);color:#000;border-color:transparent;box-shadow:0 5px 18px var(--glow);}
 .bp:hover{transform:translateY(-2px);box-shadow:0 9px 26px var(--glow);}
 .bg{background:var(--sur2);color:var(--t2);}
 .bg:hover{background:var(--sur3);color:var(--t1);}
-.bdel{background:rgba(255,82,82,0.10);color:var(--red);border-color:rgba(255,82,82,0.22);font-size:12px;padding:6px 11px;}
-.bdel:hover{background:rgba(255,82,82,0.20);}
-.bedit{background:rgba(74,158,255,0.10);color:var(--blue);border-color:rgba(74,158,255,0.22);font-size:12px;padding:6px 11px;}
-.bedit:hover{background:rgba(74,158,255,0.20);}
-.bpdf{background:rgba(45,213,122,0.10);color:var(--green);border-color:rgba(45,213,122,0.22);font-size:12px;padding:6px 11px;}
-.bpdf:hover{background:rgba(45,213,122,0.20);}
-.boff{background:rgba(74,158,255,0.10);color:var(--blue);border-color:rgba(74,158,255,0.22);padding:9px 18px;}
-.boff:hover{background:rgba(74,158,255,0.20);}
+.bdel{background:rgba(255,82,82,.10);color:var(--red);border-color:rgba(255,82,82,.22);font-size:12px;padding:6px 11px;}
+.bdel:hover{background:rgba(255,82,82,.20);}
+.bedit{background:rgba(74,158,255,.10);color:var(--blue);border-color:rgba(74,158,255,.22);font-size:12px;padding:6px 11px;}
+.bedit:hover{background:rgba(74,158,255,.20);}
+.bpdf{background:rgba(45,213,122,.10);color:var(--green);border-color:rgba(45,213,122,.22);font-size:12px;padding:6px 11px;}
+.bpdf:hover{background:rgba(45,213,122,.20);}
+.boff{background:rgba(74,158,255,.10);color:var(--blue);border-color:rgba(74,158,255,.22);}
+.boff:hover{background:rgba(74,158,255,.20);}
 .fac{display:flex;justify-content:flex-end;gap:10px;padding-top:17px;border-top:1px solid var(--bd);margin-top:8px;}
 
-/* ─────────────────────────── METRIC CARDS ──────────────────────── */
+/* ── METRIC CARDS ── */
 .mrow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;}
-.mc{
-  background:linear-gradient(160deg,var(--sur),var(--sur2));
-  border:1px solid var(--bd);border-radius:var(--r2);padding:17px 19px;
-  position:relative;overflow:hidden;
-  box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,0.05);
-  transition:transform .25s var(--spring),box-shadow .25s,border-color .2s;
-}
+.mc{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r2);padding:17px 19px;position:relative;overflow:hidden;box-shadow:var(--sh);transition:transform .25s var(--spring),box-shadow .25s,border-color .2s;}
 .mc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.mc::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.025) 50%,transparent 60%);background-size:300%;animation:glossShimmer 6s linear infinite;pointer-events:none;}
-.mc:hover{transform:translateY(-3px) scale(1.008);box-shadow:0 14px 40px rgba(0,0,0,0.5);}
-.mc.go{border-color:rgba(245,166,35,0.22);}
+.mc::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.022) 50%,transparent 60%);background-size:300%;animation:glossSweep 7s linear infinite;pointer-events:none;}
+.mc:hover{transform:translateY(-3px) scale(1.008);box-shadow:0 14px 40px rgba(0,0,0,.5);}
+.mc.go{border-color:rgba(245,166,35,.22);}
 .mc.go::before{background:linear-gradient(90deg,transparent,var(--gold),transparent);}
 .mc.go .mv{color:var(--gold);}
-.mc.gr{border-color:rgba(45,213,122,0.18);}
+.mc.gr{border-color:rgba(45,213,122,.18);}
 .mc.gr::before{background:linear-gradient(90deg,transparent,var(--green),transparent);}
 .mc.gr .mv{color:var(--green);}
-.mc.bl{border-color:rgba(74,158,255,0.18);}
+.mc.bl{border-color:rgba(74,158,255,.18);}
 .mc.bl::before{background:linear-gradient(90deg,transparent,var(--blue),transparent);}
 .mc.bl .mv{color:var(--blue);}
-.mc.pu{border-color:rgba(181,123,238,0.18);}
+.mc.pu{border-color:rgba(181,123,238,.18);}
 .mc.pu::before{background:linear-gradient(90deg,transparent,var(--purple),transparent);}
 .mc.pu .mv{color:var(--purple);}
 .ml{font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-weight:500;}
-.mv{font-size:28px;font-weight:800;color:var(--t1);line-height:1;letter-spacing:-.5px;animation:countUp .5s var(--bounce) both;}
+.mv{font-size:28px;font-weight:800;color:var(--t1);line-height:1;letter-spacing:-.5px;}
 .mu{font-size:14px;font-weight:500;color:var(--t3);margin-left:3px;}
 .md{font-family:var(--m);font-size:10px;margin-top:5px;font-weight:600;}
 .md.up{color:var(--green);}
 .md.dn{color:var(--red);}
 
-/* ─────────────────────────── INSIGHTS ─────────────────────────── */
+/* ── INSIGHTS ── */
 .irow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
-.ic{
-  background:linear-gradient(160deg,var(--sur),var(--sur2));
-  border:1px solid var(--bd);border-radius:var(--r2);padding:16px 18px;
-  border-left:3px solid var(--bd);
-  position:relative;overflow:hidden;
-  box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,0.04);
-  transition:transform .25s var(--spring),box-shadow .25s;
-}
-.ic::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.02) 50%,transparent 60%);background-size:300%;animation:glossShimmer 7s linear infinite;pointer-events:none;}
-.ic:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,0,0,0.45);}
+.ic{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r2);padding:16px 18px;border-left:3px solid var(--bd);box-shadow:var(--sh);transition:transform .25s var(--spring),box-shadow .25s;}
+.ic:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,0,0,.45);}
 .ic.good{border-left-color:var(--green);}
 .ic.warn{border-left-color:var(--gold);}
-.ic.bad {border-left-color:var(--red);}
+.ic.bad{border-left-color:var(--red);}
 .ic.info{border-left-color:var(--blue);}
 .ic-tag{font-family:var(--m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;font-weight:600;}
 .ic.good .ic-tag{color:var(--green);}
 .ic.warn .ic-tag{color:var(--gold);}
-.ic.bad  .ic-tag{color:var(--red);}
+.ic.bad .ic-tag{color:var(--red);}
 .ic.info .ic-tag{color:var(--blue);}
 .ic-val{font-size:21px;font-weight:800;color:var(--t1);margin-bottom:3px;letter-spacing:-.25px;}
 .ic-txt{font-size:12px;color:var(--t2);line-height:1.55;font-weight:500;}
 
-/* ─────────────────────────── AI PANEL ─────────────────────────── */
-.aip{background:linear-gradient(135deg,rgba(74,158,255,0.06),rgba(181,123,238,0.04));border:1px solid rgba(74,158,255,0.15);border-radius:var(--r3);margin-bottom:18px;overflow:hidden;}
-.aip-h{background:rgba(74,158,255,0.07);padding:14px 20px;border-bottom:1px solid rgba(74,158,255,0.12);display:flex;align-items:center;justify-content:space-between;}
+/* ── AI PANEL ── */
+.aip{background:linear-gradient(135deg,rgba(74,158,255,.06),rgba(181,123,238,.04));border:1px solid rgba(74,158,255,.15);border-radius:var(--r3);margin-bottom:18px;overflow:hidden;}
+.aip-h{background:rgba(74,158,255,.07);padding:14px 20px;border-bottom:1px solid rgba(74,158,255,.12);display:flex;align-items:center;justify-content:space-between;}
 .aip-ttl{font-size:14px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:8px;}
-.aip-badge{font-family:var(--m);font-size:9px;letter-spacing:1px;text-transform:uppercase;background:rgba(74,158,255,0.15);border:1px solid rgba(74,158,255,0.25);border-radius:5px;padding:3px 8px;color:var(--blue);}
+.aip-badge{font-family:var(--m);font-size:9px;letter-spacing:1px;text-transform:uppercase;background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.25);border-radius:5px;padding:3px 8px;color:var(--blue);}
 .aip-body{padding:18px 20px;}
 .ai-spin{display:flex;align-items:center;gap:10px;justify-content:center;padding:24px;}
-.ai-spn{width:20px;height:20px;border:2.5px solid rgba(74,158,255,0.2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;}
+.ai-spn{width:20px;height:20px;border:2.5px solid rgba(74,158,255,.2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;}
 .ai-sr{display:flex;align-items:center;gap:18px;margin-bottom:16px;padding-bottom:15px;border-bottom:1px solid var(--bd);}
-.ai-sn{font-size:48px;font-weight:800;line-height:1;letter-spacing:-2px;}
+.ai-sn{font-size:46px;font-weight:800;line-height:1;letter-spacing:-2px;}
 .ai-sl{font-family:var(--m);font-size:9px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
-.ai-hl{flex:1;font-size:15px;font-weight:700;color:var(--t1);line-height:1.4;}
+.ai-hl{flex:1;font-size:14px;font-weight:700;color:var(--t1);line-height:1.4;}
 .ai-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px;}
 .ai-c{background:var(--sur2);border:1px solid var(--bd);border-radius:var(--r2);padding:11px 14px;}
 .ai-ct{font-family:var(--m);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:4px;font-weight:500;}
@@ -330,67 +243,61 @@ textarea{resize:vertical;min-height:78px;line-height:1.6;}
 .ai-sg-txt{font-size:12px;color:var(--t2);line-height:1.5;font-weight:500;}
 .ai-sg-imp{font-family:var(--m);font-size:10px;color:var(--green);margin-top:5px;font-weight:600;}
 .pri{font-family:var(--m);font-size:9px;padding:3px 8px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;font-weight:600;white-space:nowrap;}
-.pri.hi{background:rgba(255,82,82,0.12);color:var(--red);border:1px solid rgba(255,82,82,0.22);}
-.pri.md{background:rgba(245,166,35,0.12);color:var(--gold);border:1px solid rgba(245,166,35,0.22);}
-.pri.lo{background:rgba(45,213,122,0.12);color:var(--green);border:1px solid rgba(45,213,122,0.22);}
+.pri.hi{background:rgba(255,82,82,.12);color:var(--red);border:1px solid rgba(255,82,82,.22);}
+.pri.md{background:rgba(245,166,35,.12);color:var(--gold);border:1px solid rgba(245,166,35,.22);}
+.pri.lo{background:rgba(45,213,122,.12);color:var(--green);border:1px solid rgba(45,213,122,.22);}
 
-/* ─────────────────────────── MILESTONES ─────────────────────────── */
-.mile-card{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r3);padding:0;margin-bottom:18px;overflow:hidden;box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,0.04);}
-.mile-hdr{background:rgba(255,255,255,0.03);padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+/* ── MILESTONES ── */
+.mile-card{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r3);overflow:hidden;margin-bottom:18px;box-shadow:var(--sh);}
+.mile-hdr{background:rgba(255,255,255,.03);padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
 .mile-ttl{font-size:14px;font-weight:700;color:var(--t1);}
-.mile-body{padding:16px 20px;}
-.mile-item{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid var(--bd);animation:milePop .4s var(--bounce) both;}
+.mile-body{padding:14px 20px;}
+.mile-item{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid var(--bd);animation:fadeUp .35s var(--bounce) both;}
 .mile-item:last-child{border-bottom:none;}
-.mile-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px;}
-.mile-info{flex:1;}
-.mile-date{font-family:var(--m);font-size:10px;color:var(--t3);letter-spacing:.5px;margin-bottom:3px;font-weight:500;}
+.mile-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;margin-top:2px;}
+.mile-date{font-family:var(--m);font-size:10px;color:var(--t3);margin-bottom:3px;font-weight:500;}
 .mile-name{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:2px;}
 .mile-desc{font-size:12px;color:var(--t2);line-height:1.45;font-weight:500;}
-.mile-type-badge{font-family:var(--m);font-size:9px;padding:2px 7px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;font-weight:600;margin-top:5px;display:inline-block;}
+.mile-tybadge{font-family:var(--m);font-size:9px;padding:2px 7px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;font-weight:600;margin-top:5px;display:inline-block;}
 .mile-empty{text-align:center;padding:28px;font-size:13px;color:var(--t3);font-weight:500;}
-/* Type colors */
-.mt-activity{background:rgba(74,158,255,0.12);color:var(--blue);border:1px solid rgba(74,158,255,0.22);}
-.mt-milestone{background:rgba(245,166,35,0.12);color:var(--gold);border:1px solid rgba(245,166,35,0.22);}
-.mt-issue{background:rgba(255,82,82,0.12);color:var(--red);border:1px solid rgba(255,82,82,0.22);}
-.mt-improvement{background:rgba(45,213,122,0.12);color:var(--green);border:1px solid rgba(45,213,122,0.22);}
-.mt-event{background:rgba(181,123,238,0.12);color:var(--purple);border:1px solid rgba(181,123,238,0.22);}
-.dot-bl{background:rgba(74,158,255,0.15);border:1px solid rgba(74,158,255,0.3);}
-.dot-go{background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);}
-.dot-re{background:rgba(255,82,82,0.15);border:1px solid rgba(255,82,82,0.3);}
-.dot-gr{background:rgba(45,213,122,0.15);border:1px solid rgba(45,213,122,0.3);}
-.dot-pu{background:rgba(181,123,238,0.15);border:1px solid rgba(181,123,238,0.3);}
+.mt-activity{background:rgba(74,158,255,.12);color:var(--blue);border:1px solid rgba(74,158,255,.22);}
+.mt-milestone{background:rgba(245,166,35,.12);color:var(--gold);border:1px solid rgba(245,166,35,.22);}
+.mt-issue{background:rgba(255,82,82,.12);color:var(--red);border:1px solid rgba(255,82,82,.22);}
+.mt-improvement{background:rgba(45,213,122,.12);color:var(--green);border:1px solid rgba(45,213,122,.22);}
+.mt-event{background:rgba(181,123,238,.12);color:var(--purple);border:1px solid rgba(181,123,238,.22);}
+.dot-bl{background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.3);}
+.dot-go{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);}
+.dot-re{background:rgba(255,82,82,.15);border:1px solid rgba(255,82,82,.3);}
+.dot-gr{background:rgba(45,213,122,.15);border:1px solid rgba(45,213,122,.3);}
+.dot-pu{background:rgba(181,123,238,.15);border:1px solid rgba(181,123,238,.3);}
 
-/* ─────────────────────────── CHARTS ───────────────────────────── */
+/* ── CHARTS ── */
 .cr2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;}
 .cr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
-.cc{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r2);padding:18px 20px;box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,0.04);transition:border-color .2s;}
+.cc{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r2);padding:18px 20px;box-shadow:var(--sh);transition:border-color .2s;}
 .cc:hover{border-color:var(--bd2);}
 .cc-ttl{font-family:var(--m);font-size:10px;color:var(--t2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:13px;font-weight:500;}
 .ch{position:relative;height:210px;}
 .ch-lg{position:relative;height:248px;}
-/* Product mix with value list */
 .mix-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;}
 .mix-ch{height:160px;position:relative;}
-.mix-vals{display:flex;flex-direction:column;gap:8px;}
-.mix-row{display:flex;align-items:center;gap:8px;}
+.mix-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
 .mix-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
 .mix-lbl{font-family:var(--m);font-size:11px;color:var(--t2);font-weight:500;flex:1;}
 .mix-val{font-size:13px;font-weight:800;color:var(--t1);}
 .mix-pct{font-family:var(--m);font-size:10px;color:var(--t3);}
-/* Progress bars */
 .pb{margin-bottom:9px;}
 .pb-top{display:flex;justify-content:space-between;margin-bottom:3px;}
 .pb-lbl{font-size:12px;font-weight:700;color:var(--t2);}
 .pb-val{font-family:var(--m);font-size:11px;color:var(--t1);font-weight:700;}
 .pb-tr{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;}
 .pb-f{height:100%;border-radius:3px;transition:width .9s var(--bounce);}
-/* Heatmap */
 .hmap{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:4px 0;}
 .hc{height:22px;border-radius:4px;cursor:default;transition:transform .15s var(--spring);}
 .hc:hover{transform:scale(1.18);}
 
-/* ─────────────────────────── TABLE ─────────────────────────────── */
-.tsh{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r3);overflow:hidden;margin-bottom:18px;box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,0.04);}
+/* ── TABLE ── */
+.tsh{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r3);overflow:hidden;margin-bottom:18px;box-shadow:var(--sh);}
 .tth{padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .tttl{font-size:15px;font-weight:800;color:var(--t1);}
 .tcnt{font-family:var(--m);font-size:11px;color:var(--t3);font-weight:500;}
@@ -403,22 +310,22 @@ tbody td{padding:9px 15px;font-size:13px;color:var(--t2);font-weight:500;}
 tbody td:first-child{color:var(--t1);font-weight:700;}
 .tgold{color:var(--gold)!important;font-weight:800!important;}
 .badge{display:inline-block;padding:3px 9px;border-radius:6px;font-family:var(--m);font-size:10px;text-transform:uppercase;font-weight:600;}
-.bg-g{background:rgba(45,213,122,0.12);color:var(--green);border:1px solid rgba(45,213,122,0.22);}
-.bg-a{background:rgba(245,166,35,0.12);color:var(--gold);border:1px solid rgba(245,166,35,0.22);}
-.bg-r{background:rgba(255,82,82,0.12);color:var(--red);border:1px solid rgba(255,82,82,0.22);}
-.bg-b{background:rgba(74,158,255,0.12);color:var(--blue);border:1px solid rgba(74,158,255,0.22);}
+.bg-g{background:rgba(45,213,122,.12);color:var(--green);border:1px solid rgba(45,213,122,.22);}
+.bg-a{background:rgba(245,166,35,.12);color:var(--gold);border:1px solid rgba(245,166,35,.22);}
+.bg-r{background:rgba(255,82,82,.12);color:var(--red);border:1px solid rgba(255,82,82,.22);}
+.bg-b{background:rgba(74,158,255,.12);color:var(--blue);border:1px solid rgba(74,158,255,.22);}
 .empty-st{padding:50px 24px;text-align:center;}
 .ei{font-size:38px;margin-bottom:11px;opacity:.35;}
 .et{font-size:16px;font-weight:700;color:var(--t3);}
 .es{font-size:12px;color:var(--t4);margin-top:4px;font-weight:500;}
 
-/* ─────────────────────────── REPORT BLOCKS ─────────────────────── */
+/* ── PERIOD REPORTS ── */
 .ptabs{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--bd);border-radius:11px;padding:3px;width:fit-content;margin-bottom:20px;}
 .ptab{padding:7px 19px;border-radius:8px;font-size:13px;font-weight:700;color:var(--t3);border:1px solid transparent;cursor:pointer;transition:all .22s var(--bounce);}
 .ptab:hover{color:var(--t2);}
-.ptab.active{color:var(--gold);background:rgba(245,166,35,0.10);border-color:rgba(245,166,35,0.22);}
+.ptab.active{color:var(--gold);background:rgba(245,166,35,.10);border-color:rgba(245,166,35,.22);}
 .rblock{background:linear-gradient(160deg,var(--sur),var(--sur2));border:1px solid var(--bd);border-radius:var(--r3);overflow:hidden;margin-bottom:20px;box-shadow:var(--sh);animation:fadeUp .35s var(--bounce) both;}
-.rb-hdr{background:linear-gradient(135deg,rgba(245,166,35,0.08),rgba(245,166,35,0.02));padding:13px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.rb-hdr{background:linear-gradient(135deg,rgba(245,166,35,.08),rgba(245,166,35,.02));padding:13px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .rb-key{font-size:16px;font-weight:800;color:var(--gold);letter-spacing:-.3px;}
 .rb-meta{font-family:var(--m);font-size:11px;color:var(--t3);margin-top:2px;font-weight:500;}
 .rsm{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--bd);}
@@ -426,24 +333,11 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 .rsl{font-family:var(--m);font-size:9px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;font-weight:500;}
 .rsv{font-size:14px;font-weight:800;color:var(--t1);}
 
-/* Official report config */
-.ofc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-.ofc-bal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:10px;}
-.ofc-info{background:rgba(74,158,255,0.07);border:1px solid rgba(74,158,255,0.18);border-radius:10px;padding:12px 15px;margin-bottom:14px;font-size:12px;color:var(--t2);line-height:1.6;font-weight:500;}
-
-/* Store banner */
-.stb{background:rgba(74,158,255,0.07);border:1px solid rgba(74,158,255,0.18);border-radius:var(--r2);padding:11px 17px;margin-bottom:17px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-
-/* ─────────────────────────── MODALS ─────────────────────────────── */
-.mo-bg{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,0.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;}
+/* ── MODALS ── */
+.mo-bg{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;}
 .mo-bg.open{display:flex;animation:fadeIn .2s ease;}
-.mbox{
-  background:var(--sur);border:1px solid var(--bd2);
-  border-radius:26px;box-shadow:var(--sh2),inset 0 1px 0 var(--shine);
-  width:560px;max-width:96vw;max-height:94vh;overflow-y:auto;
-  animation:modalIn .38s var(--spring) both;
-}
-.mbox.wide{width:820px;}
+.mbox{background:var(--sur);border:1px solid var(--bd2);border-radius:26px;box-shadow:var(--sh2),inset 0 1px 0 var(--shine);width:560px;max-width:96vw;max-height:94vh;overflow-y:auto;animation:modalIn .38s var(--spring) both;}
+.mbox.wide{width:860px;}
 .mhdr{padding:19px 24px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--sur);z-index:1;border-radius:26px 26px 0 0;}
 .mttl{font-size:17px;font-weight:800;color:var(--t1);letter-spacing:-.3px;}
 .mcl{width:30px;height:30px;border:1px solid var(--bd);background:var(--sur2);border-radius:8px;font-size:16px;color:var(--t2);display:flex;align-items:center;justify-content:center;transition:all .2s var(--spring);}
@@ -458,14 +352,17 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 .cl-ch{font-size:12px;color:var(--t2);padding:2px 0;font-weight:500;}
 .cl-ch s{color:var(--red);margin-right:4px;}
 .cl-ch b{color:var(--green);}
-.dm-g{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:17px;}
-.dm-c{background:var(--sur2);border:1px solid var(--bd);border-radius:var(--r2);padding:17px;text-align:center;}
-.dm-ic{font-size:28px;margin-bottom:8px;}
-.dm-tt{font-size:14px;font-weight:800;color:var(--t1);margin-bottom:3px;}
-.dm-sb{font-size:12px;color:var(--t2);margin-bottom:13px;line-height:1.5;font-weight:500;}
-.dm-st{font-family:var(--m);font-size:11px;color:var(--t3);text-align:center;padding:9px;border:1px solid var(--bd);border-radius:8px;font-weight:500;}
 
-/* ─────────────────────────── TOAST ─────────────────────────────── */
+/* SQL Setup box */
+.sql-box{background:var(--bg2);border:1px solid var(--bd2);border-radius:10px;padding:14px 16px;margin-bottom:14px;font-family:var(--m);font-size:11px;color:var(--green);line-height:1.7;white-space:pre;overflow-x:auto;}
+.sql-note{background:rgba(74,158,255,.07);border:1px solid rgba(74,158,255,.18);border-radius:10px;padding:12px 15px;margin-bottom:14px;font-size:13px;color:var(--t2);line-height:1.6;font-weight:500;}
+
+/* Official report config */
+.ofc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.ofc-bal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:10px;}
+.ofc-info{background:rgba(74,158,255,.07);border:1px solid rgba(74,158,255,.18);border-radius:10px;padding:12px 15px;margin-bottom:14px;font-size:13px;color:var(--t2);line-height:1.6;font-weight:500;}
+
+/* ── TOAST ── */
 .tw{position:fixed;bottom:22px;right:22px;z-index:9000;display:flex;flex-direction:column;gap:7px;align-items:flex-end;}
 .toast{font-size:13px;font-weight:700;padding:11px 17px;border-radius:12px;display:flex;align-items:center;gap:8px;max-width:340px;animation:toastIn .4s var(--spring) both;box-shadow:var(--sh2);}
 .toast.out{animation:toastIn .3s var(--ease) reverse both;}
@@ -474,22 +371,29 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 .tin{background:var(--blue);color:#fff;}
 .twrn{background:var(--gold);color:#000;}
 
-/* ─────────────────────────── RESPONSIVE ─────────────────────────── */
+/* ── RESPONSIVE ── */
 @media(max-width:1100px){.fg3,.fg4,.fg5{grid-template-columns:1fr 1fr;}.mrow{grid-template-columns:repeat(2,1fr);}.cr2,.cr3{grid-template-columns:1fr;}.irow{grid-template-columns:1fr 1fr;}.rsm{grid-template-columns:repeat(3,1fr);}.ai-cards{grid-template-columns:1fr 1fr;}.main{padding:16px;}}
 @media(max-width:680px){.fg2,.fg3,.fg4,.fg5{grid-template-columns:1fr;}.mrow{grid-template-columns:1fr 1fr;}.irow{grid-template-columns:1fr;}.tb-nav{display:none;}}
 </style>
 </head>
 <body>
 
-<!-- BG MESH -->
 <div class="bg-mesh">
-  <div class="orb" style="width:550px;height:550px;background:radial-gradient(circle,rgba(245,166,35,0.07),transparent);top:-80px;left:-60px;--d:14s;"></div>
-  <div class="orb" style="width:450px;height:450px;background:radial-gradient(circle,rgba(74,158,255,0.06),transparent);bottom:-80px;right:-50px;--d:11s;--dl:-4s;"></div>
-  <div class="orb" style="width:300px;height:300px;background:radial-gradient(circle,rgba(181,123,238,0.05),transparent);top:45%;left:38%;--d:17s;--dl:-9s;"></div>
+  <div class="orb" style="width:550px;height:550px;background:radial-gradient(circle,rgba(245,166,35,.07),transparent);top:-80px;left:-60px;--d:14s;"></div>
+  <div class="orb" style="width:450px;height:450px;background:radial-gradient(circle,rgba(74,158,255,.05),transparent);bottom:-80px;right:-50px;--d:11s;--dl:-4s;"></div>
+  <div class="orb" style="width:300px;height:300px;background:radial-gradient(circle,rgba(181,123,238,.05),transparent);top:45%;left:38%;--d:17s;--dl:-9s;"></div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="ld-logo">CP</div>
+  <div class="ld-text">CrusherOS</div>
+  <div class="ld-sub" id="ldSub">Initialising...</div>
+  <div class="ld-spin"></div>
 </div>
 
 <!-- LOGIN -->
-<div id="loginWrap">
+<div id="loginWrap" class="gone">
   <div class="lbox">
     <div class="l-logo">CP</div>
     <div class="l-brand">CrusherOS</div>
@@ -498,7 +402,7 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
     <div class="lf"><label>Password</label><div class="lf-r"><input type="password" id="lp" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"><button class="pw-btn" onclick="togglePw()" id="pwBtn">👁</button></div></div>
     <button class="l-btn" onclick="doLogin()">Sign In →</button>
     <div class="l-err" id="lerr"></div>
-    <div class="l-foot">🔐 Secured With 254-Bit Encryption.</div>
+    <div class="l-foot">🔐 Manager: VCCL &nbsp;·&nbsp; Employee: VCCL123 &nbsp;·&nbsp; ☁ Supabase Cloud</div>
   </div>
 </div>
 
@@ -511,8 +415,9 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
   <nav class="tb-nav" id="nav"></nav>
   <div class="tb-r">
     <span class="tb-dt" id="topDt"></span>
+    <div class="sync-badge" id="syncBadge"><span class="sync-dot" id="syncDot"></span><span id="syncTxt">Connected</span></div>
     <span class="tb-usr" id="tUsr"></span>
-    <button class="ib" onclick="openDM()">💾</button>
+    <button class="ib" onclick="openSetupModal()">🗄</button>
     <button class="ib" onclick="toggleTheme()" id="thBtn">☀</button>
     <button class="ib" onclick="doLogout()">⏻</button>
   </div>
@@ -522,22 +427,21 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 <div id="app" style="display:none;">
 <div class="main">
 
-  <!-- ██ DAILY ENTRY ██ -->
+  <!-- ENTRY -->
   <div class="page" id="page-entry">
     <div class="sh"><div><div class="sh-eye">TT12-P1 · Manipur Unit</div><div class="sh-title" id="entTtl">Daily Report Entry</div></div></div>
-    <div class="edt-bar" id="edtBar"><div><div class="edt-ttl">✏️ Edit Mode — Modifying Record</div><div class="edt-sub" id="edtSub"></div></div><button class="btn bg" onclick="cancelEdit()">✕ Cancel</button></div>
+    <div class="edt-bar" id="edtBar"><div><div class="edt-ttl">✏️ Edit Mode</div><div class="edt-sub" id="edtSub"></div></div><button class="btn bg" onclick="cancelEdit()">✕ Cancel</button></div>
     <form id="rForm" onsubmit="handleSubmit(event)">
       <div class="gc tilt" style="animation-delay:.04s">
         <div class="gc-ttl">Site Information</div>
         <div class="fg2">
           <div><div class="fl">Report Date</div><input type="date" id="rDate" required onchange="chkDup()"></div>
-          <div><div class="fl">Shift</div><select id="rShift"><option value="Both">Both Shifts</option><option value="Day">Day Shift</option><option value="Night">Night Shift</option></select></div>
+          <div><div class="fl">Shift</div><select id="rShift"><option value="Both">Both Shifts</option><option value="Day">Day</option><option value="Night">Night</option></select></div>
           <div><div class="fl">Site / Tunnel</div><select id="rSite"><option value="TT12-P1">TT12-P1 (Imphal)</option><option value="ADIT-1">ADIT-1</option><option value="MAIN-P2">MAIN P2</option><option value="T28-TUPUL">T28 TUPUL</option></select></div>
           <div><div class="fl">Prepared By</div><input type="text" id="rBy" placeholder="Engineer / Supervisor" maxlength="80"></div>
         </div>
-        <div class="dup-w" id="dupW">⚠ A report for this date already exists. Please use Edit instead.</div>
+        <div class="dup-w" id="dupW">⚠ A report for this date already exists. Use Edit instead.</div>
       </div>
-
       <div class="gc tilt" style="animation-delay:.08s">
         <div class="gc-ttl">Plant Run Hours</div>
         <div class="fg2">
@@ -549,77 +453,54 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
           </div>
         </div>
       </div>
-
       <div class="gc tilt" style="animation-delay:.12s">
         <div class="gc-ttl">Boulder Collection & Feeding</div>
-        <div class="fg4"><div class="fu"><div class="fl">Coll. Trips</div><input type="number" id="cTrips" min="0" placeholder="0"><span class="fu-t">tr</span></div><div class="fu"><div class="fl">Collected (MT)</div><input type="number" id="cMT" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">Feed Trips</div><input type="number" id="fTrips" min="0" placeholder="0"><span class="fu-t">tr</span></div><div class="fu"><div class="fl">Feed (MT) / Crushed</div><input type="number" id="fMT" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div></div>
+        <div class="fg4"><div class="fu"><div class="fl">Coll. Trips</div><input type="number" id="cTrips" min="0" placeholder="0"><span class="fu-t">tr</span></div><div class="fu"><div class="fl">Collected (MT)</div><input type="number" id="cMT" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">Feed Trips</div><input type="number" id="fTrips" min="0" placeholder="0"><span class="fu-t">tr</span></div><div class="fu"><div class="fl">Feed / Crushed (MT)</div><input type="number" id="fMT" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div></div>
       </div>
-
       <div class="gc tilt" style="animation-delay:.16s">
         <div class="gc-ttl">Today's Production (MT)</div>
         <div class="fg4"><div class="fu"><div class="fl">Sand</div><input type="number" id="pSand" step="0.01" min="0" placeholder="0.00" oninput="updTot()"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">10mm</div><input type="number" id="p10" step="0.01" min="0" placeholder="0.00" oninput="updTot()"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">20mm</div><input type="number" id="p20" step="0.01" min="0" placeholder="0.00" oninput="updTot()"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">80mm</div><input type="number" id="p80" step="0.01" min="0" placeholder="0.00" oninput="updTot()"><span class="fu-t">MT</span></div></div>
         <div class="tot-s"><div class="tot-l">Total Today</div><div class="tot-v" id="totDisp">0.00 MT</div></div>
       </div>
-
       <div class="gc tilt" style="animation-delay:.20s">
         <div class="gc-ttl">Material Shifted Today (MT)</div>
         <div class="mat-w"><table class="mat"><thead><tr><th>Material</th><th>P1 (TT12)</th><th>ADIT-1</th><th>Main P2</th><th>T28 Tupul</th><th style="text-align:right">Row Total</th></tr></thead><tbody id="matBody"></tbody></table></div>
       </div>
-
       <div class="gc tilt" style="animation-delay:.24s">
         <div class="gc-ttl">Current Stock Balance (MT) — Yard Inventory</div>
         <div class="fg5"><div class="fu"><div class="fl">Sand Stock</div><input type="number" id="stSand" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">10mm Stock</div><input type="number" id="st10" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">20mm Stock</div><input type="number" id="st20" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">80mm Stock</div><input type="number" id="st80" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div><div class="fu"><div class="fl">Boulder Stock</div><input type="number" id="stBld" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div></div>
       </div>
-
       <div class="gc tilt" style="animation-delay:.28s">
         <div class="gc-ttl">Vehicles & Fuel</div>
         <div class="fg4"><div><div class="fl">Excavators</div><input type="number" id="exc" min="0" max="10" placeholder="0"></div><div><div class="fl">Tippers</div><input type="number" id="tip" min="0" max="20" placeholder="0"></div><div><div class="fl">Wheel Loaders</div><input type="number" id="ldr" min="0" max="5" placeholder="0"></div><div class="fu"><div class="fl">HSD Issued</div><input type="number" id="hsd" min="0" placeholder="0"><span class="fu-t">L</span></div></div>
       </div>
-
       <div class="gc tilt" style="animation-delay:.32s">
         <div class="gc-ttl">Plant Status & Remarks</div>
-        <div class="fg2"><div class="fu"><div class="fl">Boulder Breaking (Trips)</div><input type="number" id="brkT" min="0" placeholder="0"><span class="fu-t">tr</span></div><div><div class="fl">Plant Status</div><select id="pStat"><option value="running">Running — Both Plants</option><option value="partial">Partial — One Plant</option><option value="idle">Idle — Both Plants</option><option value="breakdown">Breakdown</option><option value="maintenance">Maintenance</option></select></div><div class="fgf"><div class="fl">Remarks / Notes</div><textarea id="rmk" placeholder="Breakdown details, observations..." maxlength="500"></textarea></div><div class="fgf" id="erW" style="display:none;"><div class="fl" style="color:var(--blue)">Reason for Change *</div><textarea id="erRsn" placeholder="Describe what changed and why..." maxlength="400" style="border-color:rgba(74,158,255,0.3)"></textarea></div></div>
+        <div class="fg2"><div class="fu"><div class="fl">Boulder Breaking (Trips)</div><input type="number" id="brkT" min="0" placeholder="0"><span class="fu-t">tr</span></div><div><div class="fl">Plant Status</div><select id="pStat"><option value="running">Running — Both Plants</option><option value="partial">Partial — One Plant</option><option value="idle">Idle — Both Plants</option><option value="breakdown">Breakdown</option><option value="maintenance">Maintenance</option></select></div><div class="fgf"><div class="fl">Remarks / Notes</div><textarea id="rmk" placeholder="Breakdown details, observations..." maxlength="500"></textarea></div><div class="fgf" id="erW" style="display:none;"><div class="fl" style="color:var(--blue)">Reason for Change *</div><textarea id="erRsn" placeholder="Describe what changed and why..." maxlength="400" style="border-color:rgba(74,158,255,.3)"></textarea></div></div>
       </div>
-      <div class="fac"><button type="button" class="btn bg" onclick="clearForm()">Clear</button><button type="submit" class="btn bp" id="subBtn">💾 Save Daily Report</button></div>
+      <div class="fac"><button type="button" class="btn bg" onclick="clearForm()">Clear</button><button type="submit" class="btn bp" id="subBtn">💾 Save Report</button></div>
     </form>
   </div>
 
-  <!-- ██ RECORDS ██ -->
+  <!-- RECORDS -->
   <div class="page" id="page-records">
     <div class="sh"><div><div class="sh-eye">All Entries</div><div class="sh-title">Report Records</div></div><div class="sh-ac"><button class="btn bg" id="newEntBtn" onclick="showPage('entry')">＋ New Entry</button></div></div>
-    <div class="stb" id="stBanner" style="display:none;"><div><div style="font-size:13px;font-weight:700;color:var(--blue);">📁 Local Folder Storage Active</div><div style="font-family:var(--m);font-size:11px;color:var(--t3);margin-top:2px;" id="stPath"></div></div><button class="btn bg" onclick="openDM()" style="font-size:12px;padding:5px 11px;">Manage</button></div>
-    <div class="tsh"><div class="tth"><div class="tttl">Daily Reports</div><span class="tcnt" id="rCnt">0</span></div><div id="rBody"><div class="empty-st"><div class="ei">📋</div><div class="et">No reports yet</div><div class="es">Start by entering a daily report</div></div></div></div>
+    <div class="tsh"><div class="tth"><div class="tttl">Daily Reports</div><span class="tcnt" id="rCnt">0</span></div><div id="rBody"><div class="empty-st"><div class="ei">📋</div><div class="et">No reports yet</div></div></div></div>
   </div>
 
-  <!-- ██ DASHBOARD ██ -->
+  <!-- DASHBOARD -->
   <div class="page" id="page-dashboard">
     <div class="sh"><div><div class="sh-eye">Performance Summary</div><div class="sh-title">Operations Dashboard</div></div><div class="sh-ac"><button class="btn bg" onclick="runAI()">🤖 AI Analysis</button><button class="btn bg" onclick="expDashPDF()">⬇ Dashboard PDF</button></div></div>
-
     <div class="mrow" id="kpiRow"></div>
-    <div class="aip" id="aiPanel" style="display:none;"><div class="aip-h"><div class="aip-ttl">🤖 AI Intelligence Engine <span class="aip-badge">Analytics</span></div><div style="display:flex;gap:8px;"><button class="btn bg" style="font-size:12px;padding:5px 11px;" onclick="runAI()">↻</button><button class="btn bg" style="font-size:12px;padding:5px 11px;" onclick="document.getElementById('aiPanel').style.display='none'">✕</button></div></div><div class="aip-body" id="aiBd"></div></div>
-
+    <div class="aip" id="aiPanel" style="display:none;"><div class="aip-h"><div class="aip-ttl">🤖 AI Intelligence <span class="aip-badge">Analytics</span></div><div style="display:flex;gap:8px;"><button class="btn bg" style="font-size:12px;padding:5px 11px;" onclick="runAI()">↻</button><button class="btn bg" style="font-size:12px;padding:5px 11px;" onclick="document.getElementById('aiPanel').style.display='none'">✕</button></div></div><div class="aip-body" id="aiBd"></div></div>
     <div class="irow" id="insGrid"></div>
-
-    <!-- Milestones -->
-    <div class="mile-card"><div class="mile-hdr"><div class="mile-ttl">🏆 Project Milestones & Key Events</div><button class="btn bg" style="font-size:12px;padding:5px 12px;" onclick="openMileModal()">＋ Add Milestone</button></div><div class="mile-body" id="mileBody"><div class="mile-empty">No milestones added yet. Click + Add Milestone to track major events.</div></div></div>
-
-    <div class="cr2">
-      <div class="cc"><div class="cc-ttl">📈 Production Trend (Last 30 Days)</div><div class="ch-lg"><canvas id="trendC"></canvas></div></div>
-      <div class="cc"><div class="cc-ttl">🥧 Product Mix</div><div class="mix-wrap"><div class="mix-ch"><canvas id="mixC"></canvas></div><div class="mix-vals" id="mixVals"></div></div></div>
-    </div>
-    <div class="cr3">
-      <div class="cc"><div class="cc-ttl">⛽ HSD vs Production</div><div class="ch"><canvas id="hsdC"></canvas></div></div>
-      <div class="cc"><div class="cc-ttl">🏭 Plant Status</div><div class="ch"><canvas id="statC"></canvas></div></div>
-      <div class="cc"><div class="cc-ttl">🔧 Breakdown Hours</div><div class="ch"><canvas id="brkC"></canvas></div></div>
-    </div>
-    <div class="cr3">
-      <div class="cc" id="pbCard"><div class="cc-ttl">📊 Product Output</div><div id="pbBars" style="padding:4px 0;"></div></div>
-      <div class="cc"><div class="cc-ttl">📉 7-Day Rolling Avg</div><div class="ch"><canvas id="rollC"></canvas></div></div>
-      <div class="cc"><div class="cc-ttl">🗓 Production Heatmap</div><div class="hmap" id="hmap" style="margin-top:8px;"></div><div style="display:flex;gap:10px;margin-top:7px;font-family:var(--m);font-size:9px;color:var(--t3);align-items:center;"><div style="width:10px;height:10px;border-radius:2px;background:var(--bd)"></div>None<div style="width:10px;height:10px;border-radius:2px;background:rgba(74,158,255,0.4)"></div>Low<div style="width:10px;height:10px;border-radius:2px;background:var(--gold)"></div>High</div></div>
-    </div>
+    <div class="mile-card"><div class="mile-hdr"><div class="mile-ttl">🏆 Milestones & Key Events</div><button class="btn bg" style="font-size:12px;padding:5px 12px;" onclick="openMileModal()">＋ Add</button></div><div class="mile-body" id="mileBody"></div></div>
+    <div class="cr2"><div class="cc"><div class="cc-ttl">📈 Production Trend (Last 30 Days)</div><div class="ch-lg"><canvas id="trendC"></canvas></div></div><div class="cc"><div class="cc-ttl">🥧 Product Mix</div><div class="mix-wrap"><div class="mix-ch"><canvas id="mixC"></canvas></div><div id="mixVals"></div></div></div></div>
+    <div class="cr3"><div class="cc"><div class="cc-ttl">⛽ HSD vs Production</div><div class="ch"><canvas id="hsdC"></canvas></div></div><div class="cc"><div class="cc-ttl">🏭 Plant Status</div><div class="ch"><canvas id="statC"></canvas></div></div><div class="cc"><div class="cc-ttl">🔧 Breakdown Hours</div><div class="ch"><canvas id="brkC"></canvas></div></div></div>
+    <div class="cr3"><div class="cc"><div class="cc-ttl">📊 Product Output</div><div id="pbBars" style="padding:4px 0;"></div></div><div class="cc"><div class="cc-ttl">📉 7-Day Rolling Avg</div><div class="ch"><canvas id="rollC"></canvas></div></div><div class="cc"><div class="cc-ttl">🗓 Production Heatmap</div><div class="hmap" id="hmap" style="margin-top:8px;"></div><div style="display:flex;gap:10px;margin-top:7px;font-family:var(--m);font-size:9px;color:var(--t3);align-items:center;"><div style="width:10px;height:10px;border-radius:2px;background:var(--bd)"></div>None<div style="width:10px;height:10px;border-radius:2px;background:rgba(74,158,255,.4)"></div>Low<div style="width:10px;height:10px;border-radius:2px;background:var(--gold)"></div>High</div></div></div>
   </div>
 
-  <!-- ██ REPORTS ██ -->
+  <!-- REPORTS -->
   <div class="page" id="page-reports">
     <div class="sh"><div><div class="sh-eye">Summarised Reports</div><div class="sh-title">Period Reports</div></div><div class="sh-ac"><button class="btn boff" onclick="openOfficialRpt()">📋 Official Report</button><button class="btn bg" onclick="expRptPDF()">⬇ Export PDF</button></div></div>
     <div class="ptabs"><div class="ptab active" onclick="swP('daily',this)">Daily</div><div class="ptab" onclick="swP('monthly',this)">Monthly</div><div class="ptab" onclick="swP('quarterly',this)">Quarterly</div><div class="ptab" onclick="swP('yearly',this)">Yearly</div></div>
@@ -629,39 +510,71 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 </div>
 </div>
 
-<!-- CONFIRM MODAL -->
+<!-- CONFIRM -->
 <div class="mo-bg" id="cfMo"><div class="mbox" style="max-width:420px;"><div class="mbody" style="padding:34px 30px;"><span class="cf-ic" id="cfIc">💾</span><div class="cf-msg" id="cfMsg"></div><div class="cf-sub" id="cfSub"></div><div class="cf-ac"><button class="btn bg" onclick="closeMo('cfMo')">Cancel</button><button class="btn bp" id="cfOk">Confirm</button></div></div></div></div>
 
-<!-- CHANGELOG -->
+<!-- CL -->
 <div class="mo-bg" id="clMo"><div class="mbox"><div class="mhdr"><div class="mttl" id="clTtl">Change Log</div><button class="mcl" onclick="closeMo('clMo')">✕</button></div><div class="mbody" id="clBd"></div></div></div>
 
-<!-- DATA MANAGER -->
-<div class="mo-bg" id="dmMo"><div class="mbox"><div class="mhdr"><div class="mttl">📦 Data Manager</div><button class="mcl" onclick="closeMo('dmMo')">✕</button></div><div class="mbody"><div style="background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);border-radius:10px;padding:13px 15px;margin-bottom:17px;"><div style="font-size:14px;font-weight:800;color:var(--gold);margin-bottom:4px;">⚠ Data Persistence</div><div style="font-size:13px;color:var(--t2);line-height:1.6;font-weight:500;">Data is stored in browser localStorage. <strong style="color:var(--t1)">Export JSON before updating the app</strong> to prevent data loss. File System API requires Chrome/Edge.</div></div><div class="dm-g"><div class="dm-c"><div class="dm-ic">📁</div><div class="dm-tt">Choose Folder</div><div class="dm-sb">Auto-save all reports to a local folder</div><button class="btn bg" style="width:100%" onclick="chooseFoldr()">Choose Folder</button></div><div class="dm-c"><div class="dm-ic">💾</div><div class="dm-tt">Save to Folder</div><div class="dm-sb">Manually save current data to folder</div><button class="btn bg" style="width:100%" onclick="saveFoldr()">Save Now</button></div><div class="dm-c"><div class="dm-ic">📤</div><div class="dm-tt">Export JSON</div><div class="dm-sb">Download all reports as JSON backup</div><button class="btn bg" style="width:100%" onclick="exportJSON()">Export</button></div><div class="dm-c"><div class="dm-ic">📥</div><div class="dm-tt">Import JSON</div><div class="dm-sb">Restore from a JSON backup file</div><button class="btn bg" style="width:100%" onclick="document.getElementById('impF').click()">Import</button><input type="file" id="impF" accept=".json" style="display:none" onchange="importJSON(event)"></div></div><div class="dm-st" id="dmSt">Loading...</div></div></div></div>
+<!-- SETUP MODAL -->
+<div class="mo-bg" id="setupMo"><div class="mbox wide"><div class="mhdr"><div class="mttl">🗄 Supabase Database Setup</div><button class="mcl" onclick="closeMo('setupMo')">✕</button></div><div class="mbody">
+  <div class="sql-note">Run this SQL in your Supabase SQL Editor (<b>Dashboard → SQL Editor → New Query</b>) to create the required tables. Only needs to be done once.</div>
+  <div class="sql-note" style="border-color:rgba(245,166,35,.2);background:rgba(245,166,35,.06);">Project: <b>psrfvlhqrtzevttpmrpm.supabase.co</b> · Status: <span id="connStatus">Checking...</span></div>
+  <div class="sql-box" id="sqlBox">-- Run this once in Supabase SQL Editor
+
+CREATE TABLE IF NOT EXISTS public.crusher_reports (
+  id         BIGINT PRIMARY KEY,
+  report_date TEXT NOT NULL,
+  site        TEXT,
+  report_data JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public.crusher_milestones (
+  id             BIGINT PRIMARY KEY,
+  milestone_date TEXT,
+  milestone_data JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at     TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable Row Level Security + allow public access
+ALTER TABLE public.crusher_reports ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "allow_all" ON public.crusher_reports;
+CREATE POLICY "allow_all" ON public.crusher_reports
+  FOR ALL USING (true) WITH CHECK (true);
+
+ALTER TABLE public.crusher_milestones ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "allow_all" ON public.crusher_milestones;
+CREATE POLICY "allow_all" ON public.crusher_milestones
+  FOR ALL USING (true) WITH CHECK (true);</div>
+  <button class="btn bg" style="width:100%;margin-bottom:10px;" onclick="copySql()">📋 Copy SQL</button>
+  <button class="btn bp" style="width:100%;" onclick="testConn()">🔌 Test Connection</button>
+</div></div></div>
 
 <!-- MILESTONE MODAL -->
 <div class="mo-bg" id="mileMo"><div class="mbox"><div class="mhdr"><div class="mttl" id="mileMoTtl">Add Milestone</div><button class="mcl" onclick="closeMo('mileMo')">✕</button></div><div class="mbody">
-  <div class="fg2"><div><div class="fl">Date</div><input type="date" id="mDate"></div><div><div class="fl">Type</div><select id="mType"><option value="activity">🏗 Major Activity</option><option value="milestone">🏆 Milestone Reached</option><option value="improvement">💡 Major Improvement</option><option value="issue">⚠️ Issue / Event</option><option value="event">🎉 Key Event</option></select></div></div>
-  <div style="margin-bottom:13px;"><div class="fl">Title</div><input type="text" id="mTitle" placeholder="Brief milestone title" maxlength="100"></div>
-  <div style="margin-bottom:13px;"><div class="fl">Description</div><textarea id="mDesc" placeholder="Describe this milestone or event..." maxlength="400" style="min-height:70px;"></textarea></div>
+  <div class="fg2"><div><div class="fl">Date</div><input type="date" id="mDate"></div><div><div class="fl">Type</div><select id="mType"><option value="activity">🏗 Major Activity</option><option value="milestone">🏆 Milestone</option><option value="improvement">💡 Improvement</option><option value="issue">⚠️ Issue</option><option value="event">🎉 Key Event</option></select></div></div>
+  <div style="margin-bottom:13px;"><div class="fl">Title</div><input type="text" id="mTitle" placeholder="Brief title" maxlength="100"></div>
+  <div style="margin-bottom:13px;"><div class="fl">Description</div><textarea id="mDesc" placeholder="Describe this event..." maxlength="400" style="min-height:70px;"></textarea></div>
   <div class="fac"><button class="btn bg" onclick="closeMo('mileMo')">Cancel</button><button class="btn bp" onclick="saveMile()">Save Milestone</button></div>
 </div></div></div>
 
 <!-- OFFICIAL REPORT MODAL -->
 <div class="mo-bg" id="ofcMo"><div class="mbox wide"><div class="mhdr"><div class="mttl">📋 Generate Official Daily Progress Report</div><button class="mcl" onclick="closeMo('ofcMo')">✕</button></div><div class="mbody">
-  <div class="ofc-info">This generates the official Vensar Constructions report (matching the company format). Select the report date and the period start date to calculate cumulative totals. Stock balance is taken from the saved report for that date.</div>
+  <div class="ofc-info">Generates the official Vensar Constructions report. Select report date and period to calculate cumulative totals. Stock balances are auto-filled from saved data.</div>
   <div class="ofc-grid">
     <div><div class="fl">Report Date</div><select id="ofcDate" style="width:100%"></select></div>
     <div><div class="fl">Period Start Date</div><input type="date" id="ofcFrom"></div>
     <div><div class="fl">Site / Tunnel</div><select id="ofcSite"><option value="TT12-P1">TT12-P1 IMPHAL</option><option value="ADIT-1">ADIT-1</option><option value="MAIN-P2">MAIN P2</option><option value="T28-TUPUL">T28 TUPUL</option></select></div>
-    <div><div class="fl">Prepared By</div><input type="text" id="ofcPrepBy" placeholder="Engineer name" style="width:100%"></div>
+    <div><div class="fl">Prepared By</div><input type="text" id="ofcPrepBy" placeholder="Engineer name"></div>
   </div>
-  <div style="font-family:var(--m);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-weight:600;">Override Stock Balance (leave 0 to use saved values)</div>
+  <div style="font-family:var(--m);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-weight:600;">Override Stock Balance (0 = use saved values)</div>
   <div class="ofc-bal-grid">
-    <div class="fu"><div class="fl">Sand Stock (MT)</div><input type="number" id="obSand" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
-    <div class="fu"><div class="fl">10mm Stock (MT)</div><input type="number" id="ob10" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
-    <div class="fu"><div class="fl">20mm Stock (MT)</div><input type="number" id="ob20" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
-    <div class="fu"><div class="fl">80mm Stock (MT)</div><input type="number" id="ob80" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
-    <div class="fu"><div class="fl">Boulder Stock (MT)</div><input type="number" id="obBld" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
+    <div class="fu"><div class="fl">Sand (MT)</div><input type="number" id="obSand" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
+    <div class="fu"><div class="fl">10mm (MT)</div><input type="number" id="ob10" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
+    <div class="fu"><div class="fl">20mm (MT)</div><input type="number" id="ob20" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
+    <div class="fu"><div class="fl">80mm (MT)</div><input type="number" id="ob80" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
+    <div class="fu"><div class="fl">Boulder (MT)</div><input type="number" id="obBld" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
   </div>
   <div class="fac"><button class="btn bg" onclick="closeMo('ofcMo')">Cancel</button><button class="btn bp" onclick="genOfficialPDF()">📄 Generate Official PDF</button></div>
 </div></div></div>
@@ -669,33 +582,170 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 <div class="tw" id="toastWrap"></div>
 
 <script>
-/* ══════════════ SECURITY ══════════════ */
+/* ══════════════════════════════════════════════════
+   SUPABASE CONFIG
+══════════════════════════════════════════════════ */
+const SUPA_URL = 'https://psrfvlhqrtzevttpmrpm.supabase.co';
+const SUPA_KEY = 'sb_publishable_DrRFI3fmKhygMF36-aoIIA_A8Ew0k2Y';
+let sb = null;
+let sbReady = false;
+
+async function initSupabase(){
+  try{
+    if(typeof window.supabase === 'undefined'){
+      console.warn('Supabase SDK not loaded, using localStorage fallback.');
+      setSyncStatus('offline','localStorage');
+      return;
+    }
+    const { createClient } = window.supabase;
+    sb = createClient(SUPA_URL, SUPA_KEY);
+    // Test connection
+    const { error } = await sb.from('crusher_reports').select('id').limit(1);
+    if(error && error.code !== 'PGRST116'){
+      console.warn('Supabase connection issue:', error.message);
+      setSyncStatus('error', 'DB Error');
+      sb = null;
+    } else {
+      sbReady = true;
+      setSyncStatus('ok','Cloud DB');
+    }
+  } catch(e){
+    console.warn('Supabase init failed:', e.message);
+    setSyncStatus('error','Offline');
+    sb = null;
+  }
+}
+
+function setSyncStatus(state, text){
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncTxt');
+  if(!dot||!txt) return;
+  dot.className = 'sync-dot' + (state==='ok'?'':state==='error'?' error':' syncing');
+  txt.textContent = text;
+}
+
+/* ══════════════════════════════════════════════════
+   DB LAYER — Supabase + localStorage fallback
+══════════════════════════════════════════════════ */
+const LS_R = 'cros_v7', LS_M = 'cros_miles_v7';
+
+const DB = {
+  // ── REPORTS ──
+  async loadReports(){
+    const fallback = JSON.parse(localStorage.getItem(LS_R)||'[]');
+    if(!sb) return fallback;
+    try{
+      setSyncStatus('syncing','Loading...');
+      const { data, error } = await sb.from('crusher_reports').select('*').order('report_date',{ascending:false});
+      if(error) throw error;
+      const recs = (data||[]).map(row => ({id:Number(row.id), ...row.report_data, date:row.report_date, site:row.site}));
+      localStorage.setItem(LS_R, JSON.stringify(recs));
+      setSyncStatus('ok','Cloud DB');
+      return recs;
+    } catch(e){
+      setSyncStatus('error','Load Error');
+      toast('DB load error — using cached data','wrn');
+      return fallback;
+    }
+  },
+
+  async upsertReport(r){
+    // Always update localStorage first
+    let recs = JSON.parse(localStorage.getItem(LS_R)||'[]');
+    const idx = recs.findIndex(x=>x.id===r.id);
+    if(idx>=0) recs[idx]=r; else recs.unshift(r);
+    localStorage.setItem(LS_R, JSON.stringify(recs));
+    if(!sb) return;
+    try{
+      setSyncStatus('syncing','Saving...');
+      const { error } = await sb.from('crusher_reports').upsert({
+        id: r.id,
+        report_date: r.date,
+        site: r.site,
+        report_data: r
+      },{onConflict:'id'});
+      if(error) throw error;
+      setSyncStatus('ok','Cloud DB');
+    } catch(e){
+      setSyncStatus('error','Save Error');
+      toast('Cloud save failed — saved locally','wrn');
+    }
+  },
+
+  async deleteReport(id){
+    let recs = JSON.parse(localStorage.getItem(LS_R)||'[]');
+    recs = recs.filter(r=>r.id!==id);
+    localStorage.setItem(LS_R, JSON.stringify(recs));
+    if(!sb) return;
+    try{
+      setSyncStatus('syncing','Deleting...');
+      const { error } = await sb.from('crusher_reports').delete().eq('id',id);
+      if(error) throw error;
+      setSyncStatus('ok','Cloud DB');
+    } catch(e){
+      setSyncStatus('error','Del Error');
+    }
+  },
+
+  // ── MILESTONES ──
+  async loadMilestones(){
+    const fallback = JSON.parse(localStorage.getItem(LS_M)||'[]');
+    if(!sb) return fallback;
+    try{
+      const { data, error } = await sb.from('crusher_milestones').select('*').order('milestone_date',{ascending:false});
+      if(error) throw error;
+      const miles = (data||[]).map(row => ({id:Number(row.id), ...row.milestone_data}));
+      localStorage.setItem(LS_M, JSON.stringify(miles));
+      return miles;
+    } catch(e){
+      return fallback;
+    }
+  },
+
+  async upsertMilestone(m){
+    let miles = JSON.parse(localStorage.getItem(LS_M)||'[]');
+    const idx = miles.findIndex(x=>x.id===m.id);
+    if(idx>=0) miles[idx]=m; else miles.unshift(m);
+    localStorage.setItem(LS_M, JSON.stringify(miles));
+    if(!sb) return;
+    try{
+      const { error } = await sb.from('crusher_milestones').upsert({id:m.id,milestone_date:m.date,milestone_data:m},{onConflict:'id'});
+      if(error) throw error;
+    } catch(e){ toast('Milestone save failed — stored locally','wrn'); }
+  },
+
+  async deleteMilestone(id){
+    let miles = JSON.parse(localStorage.getItem(LS_M)||'[]');
+    miles = miles.filter(m=>m.id!==id);
+    localStorage.setItem(LS_M, JSON.stringify(miles));
+    if(!sb) return;
+    try{
+      const { error } = await sb.from('crusher_milestones').delete().eq('id',id);
+      if(error) throw error;
+    } catch(e){}
+  }
+};
+
+/* ══════════════════════════════════════════════════
+   SECURITY
+══════════════════════════════════════════════════ */
 const SEC={
   MAX_ATT:5,LOCK_MS:300000,SESS_MS:1800000,
   att:0,lockedUntil:0,lastAct:Date.now(),
   init(){this.lastAct=Date.now();this.startSess();['mousedown','keydown','touchstart'].forEach(e=>document.addEventListener(e,()=>this.touch(),{passive:true}));},
   touch(){this.lastAct=Date.now();},
   isLocked(){return Date.now()<this.lockedUntil;},
-  lock(){this.lockedUntil=Date.now()+this.LOCK_MS;alert('Account locked for 5 minutes due to too many failed attempts.');},
+  lock(){this.lockedUntil=Date.now()+this.LOCK_MS;alert('Account locked for 5 minutes.');},
   startSess(){const b=document.getElementById('sbarf');const t=()=>{if(!CU){requestAnimationFrame(t);return;}const e=Date.now()-this.lastAct,p=Math.max(0,100-(e/this.SESS_MS)*100);if(b)b.style.width=p+'%';if(e>this.SESS_MS){doLogout();toast('Session expired.','wrn');return;}requestAnimationFrame(t);};t();},
   san(s){if(typeof s!=='string')return'';return s.replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#x27;'}[c]));},
   cmp(a,b){if(!a||!b||a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0;}
 };
 
-/* ══════════════ DATA STORE ══════════════ */
-const DS={
-  KEY:'cros_v6',MKEY:'cros_miles',FILE:'crusher_reports.json',dir:null,
-  load(){try{return JSON.parse(localStorage.getItem(this.KEY)||'[]');}catch{return[];}},
-  loadM(){try{return JSON.parse(localStorage.getItem(this.MKEY)||'[]');}catch{return[];}},
-  save(d){try{localStorage.setItem(this.KEY,JSON.stringify(d));if(this.dir)this._sd(d).catch(()=>{});}catch(e){toast('Storage warn: '+e.message,'wrn');}},
-  saveM(d){localStorage.setItem(this.MKEY,JSON.stringify(d));},
-  async _sd(d){try{const fh=await this.dir.getFileHandle(this.FILE,{create:true});const w=await fh.createWritable();await w.write(JSON.stringify(d,null,2));await w.close();}catch{}},
-  async chooseDir(){if(!('showDirectoryPicker' in window)){toast('Use Chrome/Edge for folder support.','wrn');return;}try{this.dir=await window.showDirectoryPicker({mode:'readwrite'});await this._sd(reports);toast('📁 '+this.dir.name,'ok');updStBanner();}catch(e){if(e.name!=='AbortError')toast(e.message,'err');}},
-  async saveDir(){if(!this.dir){toast('Choose a folder first.','wrn');return;}await this._sd(reports);toast('💾 Saved to folder!','ok');}
-};
+/* ══════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════ */
+let reports=[], milestones=[], CU=null, editId=null, period='daily', charts={}, editMileId=null;
 
-/* ══════════════ STATE ══════════════ */
-let reports=DS.load(), milestones=DS.loadM(), CU=null, editId=null, period='daily', charts={};
 const USERS={Manager:{pass:'VCCL',role:'manager'},Employee:{pass:'VCCL123',role:'employee'}};
 const PAGES={
   manager:[{id:'dashboard',l:'Dashboard'},{id:'records',l:'Records'},{id:'reports',l:'Reports'}],
@@ -705,11 +755,36 @@ const MAT=['Sand','10mm','20mm','80mm','Boulder'];
 const COLS=['p1','adit','p2','tupul'];
 const SCLS={running:'bg-g',partial:'bg-a',idle:'bg-r',breakdown:'bg-r',maintenance:'bg-a'};
 const SLBL={running:'Running',partial:'Partial',idle:'Idle',breakdown:'Breakdown',maintenance:'Maint.'};
+const MILE_TYPES={activity:{icon:'🏗',label:'Major Activity',cls:'mt-activity',dot:'dot-bl'},milestone:{icon:'🏆',label:'Milestone',cls:'mt-milestone',dot:'dot-go'},improvement:{icon:'💡',label:'Improvement',cls:'mt-improvement',dot:'dot-gr'},issue:{icon:'⚠️',label:'Issue',cls:'mt-issue',dot:'dot-re'},event:{icon:'🎉',label:'Key Event',cls:'mt-event',dot:'dot-pu'}};
+
 const gv=id=>document.getElementById(id)?.value||'';
 const flt=x=>parseFloat(x)||0;
 const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
+const ss=s=>String(s==null?'—':s);
 
-/* ══════════════ LOGIN ══════════════ */
+/* ══════════════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════════════ */
+(async function boot(){
+  ldSub('Connecting to Supabase...');
+  await initSupabase();
+  ldSub('Loading data...');
+  reports = await DB.loadReports();
+  milestones = await DB.loadMilestones();
+  ldSub('Ready!');
+  setTimeout(()=>{
+    const ls=document.getElementById('loadingScreen');
+    ls.classList.add('out');
+    setTimeout(()=>ls.classList.add('gone'),400);
+    const lw=document.getElementById('loginWrap');
+    lw.classList.remove('gone');
+  },300);
+})();
+function ldSub(t){const e=document.getElementById('ldSub');if(e)e.textContent=t;}
+
+/* ══════════════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════════════ */
 function togglePw(){const i=document.getElementById('lp'),b=document.getElementById('pwBtn');i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'👁':'🙈';if(i.type==='text')setTimeout(()=>{i.type='password';b.textContent='👁';},4000);}
 function doLogin(){
   if(SEC.isLocked()){toast('Account locked.','err');return;}
@@ -721,17 +796,19 @@ function doLogin(){
     document.getElementById('lp').value='';
     const lw=document.getElementById('loginWrap');lw.classList.add('out');setTimeout(()=>lw.classList.add('gone'),460);
     document.getElementById('topbar').style.display='flex';document.getElementById('app').style.display='block';
-    initApp();toast(`Welcome, ${u}! 👋`,'ok');
+    initApp();toast(`Welcome, ${u}! 👋`,'tok');
   }else{
     SEC.att++;const rem=SEC.MAX_ATT-SEC.att;
-    if(rem<=0){SEC.lock();err.textContent='Account locked for 5 minutes.';err.style.display='block';return;}
-    err.textContent=`❌ Wrong credentials — ${rem} attempt${rem!==1?'s':''} remaining.`;err.style.display='block';
+    if(rem<=0){SEC.lock();err.textContent='Locked for 5 minutes.';err.style.display='block';return;}
+    err.textContent=`❌ Wrong credentials — ${rem} attempt${rem!==1?'s':''} left.`;err.style.display='block';
   }
 }
-function doLogout(){CU=null;editId=null;Object.values(charts).forEach(c=>c?.destroy());charts={};const lw=document.getElementById('loginWrap');lw.classList.remove('out','gone');document.getElementById('topbar').style.display='none';document.getElementById('app').style.display='none';document.getElementById('lu').value='';document.getElementById('lp').value='';document.getElementById('lerr').style.display='none';toast('Signed out.','ok');}
+function doLogout(){CU=null;editId=null;Object.values(charts).forEach(c=>c?.destroy());charts={};const lw=document.getElementById('loginWrap');lw.classList.remove('out','gone');document.getElementById('topbar').style.display='none';document.getElementById('app').style.display='none';document.getElementById('lu').value='';document.getElementById('lp').value='';document.getElementById('lerr').style.display='none';toast('Signed out.','tok');}
 
-/* ══════════════ INIT ══════════════ */
-async function initApp(){
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+function initApp(){
   document.getElementById('topDt').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
   document.getElementById('tUsr').innerHTML=`<b>${SEC.san(CU.name)}</b> · ${CU.role}`;
   buildNav();buildMat();sv('rDate',new Date().toISOString().split('T')[0]);
@@ -750,7 +827,9 @@ function showPage(n){
 }
 function toggleTheme(){const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');document.getElementById('thBtn').textContent=d?'☽':'☀';setTimeout(()=>{if(document.getElementById('page-dashboard').classList.contains('active'))renderDash();},80);}
 
-/* ══════════════ FORM ══════════════ */
+/* ══════════════════════════════════════════════════
+   FORM
+══════════════════════════════════════════════════ */
 function buildMat(){const b=document.getElementById('matBody');if(!b)return;b.innerHTML='';MAT.forEach(row=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="mat-lb">${row}</td>`+COLS.map(c=>`<td><input type="number" step="0.01" min="0" class="mi" data-row="${row}" data-col="${c}" placeholder="0.00" oninput="calcMR('${row}')"></td>`).join('')+`<td class="mat-tt" id="mt-${row}">0.00</td>`;b.appendChild(tr);});}
 function calcMR(row){let t=0;document.querySelectorAll(`.mi[data-row="${row}"]`).forEach(i=>t+=flt(i.value));const e=document.getElementById('mt-'+row);if(e)e.textContent=t.toFixed(2);}
 function updTot(){const t=flt(gv('pSand'))+flt(gv('p10'))+flt(gv('p20'))+flt(gv('p80'));document.getElementById('totDisp').textContent=t.toFixed(2)+' MT';}
@@ -762,45 +841,31 @@ function handleSubmit(e){
   const date=gv('rDate');
   if(!editId&&reports.find(r=>r.date===date)){toast('Report for this date exists — use Edit.','err');return;}
   const tot=flt(gv('pSand'))+flt(gv('p10'))+flt(gv('p20'))+flt(gv('p80'));
-  showConfirm(editId?'✏️':'💾',editId?'Update this report?':'Save this daily report?',
-    `<b style="font-size:15px;color:var(--t1)">${fd(date)}</b> · ${SEC.san(gv('rSite'))}<br>Today's Production: <b style="color:var(--gold)">${tot.toFixed(2)} MT</b>`,
+  showConfirm(editId?'✏️':'💾',editId?'Update this report?':'Save this report?',
+    `<b style="font-size:15px;color:var(--t1)">${fd(date)}</b> · ${SEC.san(gv('rSite'))}<br>Production: <b style="color:var(--gold)">${tot.toFixed(2)} MT</b>`,
     editId?'✅ Update':'✅ Save',editId?doUpdate:doSave);
 }
-
 function buildObj(){
-  return{
-    id:editId||Date.now(),date:gv('rDate'),shift:gv('rShift'),site:gv('rSite'),preparedBy:SEC.san(gv('rBy')),
-    plant120:{day:flt(gv('p120d')),night:flt(gv('p120n')),breakdown:flt(gv('p120b'))},
-    plant150:{day:flt(gv('p150d')),night:flt(gv('p150n')),breakdown:flt(gv('p150b'))},
-    boulders:{collectedTrips:flt(gv('cTrips')),collectedMT:flt(gv('cMT')),feedingTrips:flt(gv('fTrips')),feedingMT:flt(gv('fMT'))},
-    production:{sand:flt(gv('pSand')),'10mm':flt(gv('p10')),'20mm':flt(gv('p20')),'80mm':flt(gv('p80')),total:flt(gv('pSand'))+flt(gv('p10'))+flt(gv('p20'))+flt(gv('p80'))},
-    stockBalance:{sand:flt(gv('stSand')),'10mm':flt(gv('st10')),'20mm':flt(gv('st20')),'80mm':flt(gv('st80')),boulder:flt(gv('stBld'))},
-    shifted:getShifted(),
-    vehicles:{excavators:flt(gv('exc')),tippers:flt(gv('tip')),loaders:flt(gv('ldr'))},
-    hsd:flt(gv('hsd')),breakingTrips:flt(gv('brkT')),plantStatus:gv('pStat'),remarks:SEC.san(gv('rmk')),
-    createdBy:CU.name,createdAt:new Date().toISOString()
-  };
+  return{id:editId||Date.now(),date:gv('rDate'),shift:gv('rShift'),site:gv('rSite'),preparedBy:SEC.san(gv('rBy')),plant120:{day:flt(gv('p120d')),night:flt(gv('p120n')),breakdown:flt(gv('p120b'))},plant150:{day:flt(gv('p150d')),night:flt(gv('p150n')),breakdown:flt(gv('p150b'))},boulders:{collectedTrips:flt(gv('cTrips')),collectedMT:flt(gv('cMT')),feedingTrips:flt(gv('fTrips')),feedingMT:flt(gv('fMT'))},production:{sand:flt(gv('pSand')),'10mm':flt(gv('p10')),'20mm':flt(gv('p20')),'80mm':flt(gv('p80')),total:flt(gv('pSand'))+flt(gv('p10'))+flt(gv('p20'))+flt(gv('p80'))},stockBalance:{sand:flt(gv('stSand')),'10mm':flt(gv('st10')),'20mm':flt(gv('st20')),'80mm':flt(gv('st80')),boulder:flt(gv('stBld'))},shifted:getShifted(),vehicles:{excavators:flt(gv('exc')),tippers:flt(gv('tip')),loaders:flt(gv('ldr'))},hsd:flt(gv('hsd')),breakingTrips:flt(gv('brkT')),plantStatus:gv('pStat'),remarks:SEC.san(gv('rmk')),createdBy:CU.name,createdAt:new Date().toISOString()};
 }
-
-function doSave(){const r=buildObj();r.changelog=[];reports.unshift(r);DS.save(reports);toast('Report saved! 🎉','ok');clearForm();}
-function doUpdate(){
+async function doSave(){const r=buildObj();r.changelog=[];await DB.upsertReport(r);reports.unshift(r);toast('Report saved! 🎉','tok');clearForm();}
+async function doUpdate(){
   const reason=gv('erRsn').trim();if(!reason){toast('Enter reason for change.','err');return;}
   const ex=reports.find(r=>r.id===editId);if(!ex)return;
   const nw=buildObj();
-  const flds=[['Date',ex.date,nw.date],['Shift',ex.shift,nw.shift],['Total Prod',ex.production.total,nw.production.total],['HSD',ex.hsd,nw.hsd],['Status',ex.plantStatus,nw.plantStatus]];
+  const flds=[['Date',ex.date,nw.date],['Shift',ex.shift,nw.shift],['Total',ex.production.total,nw.production.total],['HSD',ex.hsd,nw.hsd],['Status',ex.plantStatus,nw.plantStatus]];
   const chgs=flds.filter(([,o,n])=>String(o)!==String(n)).map(([l,o,n])=>({label:l,from:o,to:n}));
   ex.changelog=ex.changelog||[];ex.changelog.push({ts:new Date().toISOString(),by:CU.name,reason:SEC.san(reason),changes:chgs});
   Object.assign(ex,{...nw,changelog:ex.changelog,createdBy:ex.createdBy,createdAt:ex.createdAt});
-  DS.save(reports);cancelEdit();toast('Report updated ✅','ok');
+  await DB.upsertReport(ex);cancelEdit();toast('Updated ✅','tok');
 }
 function clearForm(){document.getElementById('rForm').reset();sv('rDate',new Date().toISOString().split('T')[0]);document.getElementById('totDisp').textContent='0.00 MT';document.getElementById('dupW').style.display='none';MAT.forEach(r=>{const e=document.getElementById('mt-'+r);if(e)e.textContent='0.00';});}
-
 function loadEdit(id){
   const r=reports.find(x=>x.id===id);if(!r)return;editId=id;showPage('entry');
   document.getElementById('edtBar').classList.add('show');
-  document.getElementById('edtSub').textContent=`Editing: ${fd(r.date)} · ${r.site} · ${r.production.total.toFixed(1)} MT`;
+  document.getElementById('edtSub').textContent=`Editing: ${fd(r.date)} · ${r.production.total.toFixed(1)} MT`;
   document.getElementById('entTtl').textContent='Edit Report';
-  document.getElementById('subBtn').textContent='✏️ Update Report';
+  document.getElementById('subBtn').textContent='✏️ Update';
   document.getElementById('erW').style.display='block';sv('erRsn','');
   document.getElementById('dupW').style.display='none';
   sv('rDate',r.date);sv('rShift',r.shift);sv('rSite',r.site);sv('rBy',r.preparedBy||'');
@@ -814,13 +879,15 @@ function loadEdit(id){
   updTot();MAT.forEach(row=>{COLS.forEach(col=>{const e=document.querySelector(`.mi[data-row="${row}"][data-col="${col}"]`);if(e&&r.shifted?.[row])e.value=r.shifted[row][col]||0;});calcMR(row);});
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function cancelEdit(){editId=null;document.getElementById('edtBar').classList.remove('show');document.getElementById('entTtl').textContent='Daily Report Entry';document.getElementById('subBtn').textContent='💾 Save Daily Report';document.getElementById('erW').style.display='none';clearForm();if(CU?.role==='employee')showPage('records');}
+function cancelEdit(){editId=null;document.getElementById('edtBar').classList.remove('show');document.getElementById('entTtl').textContent='Daily Report Entry';document.getElementById('subBtn').textContent='💾 Save Report';document.getElementById('erW').style.display='none';clearForm();if(CU?.role==='employee')showPage('records');}
 
-/* ══════════════ RECORDS ══════════════ */
+/* ══════════════════════════════════════════════════
+   RECORDS
+══════════════════════════════════════════════════ */
 function renderRecords(){
-  const c=document.getElementById('rBody');document.getElementById('rCnt').textContent=reports.length+' records';updStBanner();
-  if(!reports.length){c.innerHTML=`<div class="empty-st"><div class="ei">📋</div><div class="et">No reports yet</div><div class="es">Start by entering a daily report</div></div>`;return;}
-  const canDel=CU?.role==='manager';const canEdit=CU?.role==='employee';
+  const c=document.getElementById('rBody');document.getElementById('rCnt').textContent=reports.length+' records';
+  if(!reports.length){c.innerHTML=`<div class="empty-st"><div class="ei">📋</div><div class="et">No reports yet</div><div class="es">Start by adding a daily report</div></div>`;return;}
+  const canDel=CU?.role==='manager',canEdit=CU?.role==='employee';
   c.innerHTML=`<table><thead><tr><th>Date</th><th>Site</th><th>Shift</th><th>Today Prod.</th><th>Sand</th><th>10mm</th><th>20mm</th><th>Boulder Fed</th><th>HSD</th><th>Status</th><th>Actions</th></tr></thead>
   <tbody>${reports.map(r=>`<tr>
     <td>${fd(r.date)}</td><td>${r.site}</td><td>${r.shift}</td>
@@ -836,120 +903,83 @@ function renderRecords(){
     </div></td>
   </tr>`).join('')}</tbody></table>`;
 }
-function delRpt(id){showConfirm('🗑️','Delete this report?','This <strong>cannot be undone</strong>.','Delete',()=>{reports=reports.filter(r=>r.id!==id);DS.save(reports);renderRecords();toast('Deleted.','err');});}
-function openCL(id){
-  const r=reports.find(x=>x.id===id);if(!r)return;
-  document.getElementById('clTtl').textContent=`Change Log — ${fd(r.date)}`;
-  const b=document.getElementById('clBd');
-  if(!r.changelog?.length){b.innerHTML='<div style="color:var(--t3);font-size:13px;font-weight:500;">No changes recorded.</div>';return;}
-  b.innerHTML=[...r.changelog].reverse().map(c=>`<div class="cl-en"><div class="cl-me">📝 ${fdt(c.ts)} · ${SEC.san(c.by)} · "${SEC.san(c.reason)}"</div>${c.changes.map(ch=>`<div class="cl-ch">${ch.label}: <s>${String(ch.from)}</s> <b>→ ${String(ch.to)}</b></div>`).join('')}</div>`).join('');
-  openMo('clMo');
-}
+async function delRpt(id){showConfirm('🗑️','Delete this report?','This <strong>cannot be undone</strong>.','Delete',async()=>{await DB.deleteReport(id);reports=reports.filter(r=>r.id!==id);renderRecords();toast('Deleted.','ter');});}
+function openCL(id){const r=reports.find(x=>x.id===id);if(!r)return;document.getElementById('clTtl').textContent=`Change Log — ${fd(r.date)}`;const b=document.getElementById('clBd');if(!r.changelog?.length){b.innerHTML='<div style="color:var(--t3);font-size:13px;font-weight:500;">No changes recorded.</div>';return;}b.innerHTML=[...r.changelog].reverse().map(c=>`<div class="cl-en"><div class="cl-me">📝 ${fdt(c.ts)} · ${SEC.san(c.by)} · "${SEC.san(c.reason)}"</div>${c.changes.map(ch=>`<div class="cl-ch">${SEC.san(ch.label)}: <s>${ss(ch.from)}</s> <b>→ ${ss(ch.to)}</b></div>`).join('')}</div>`).join('');openMo('clMo');}
 
-/* ══════════════ MILESTONES ══════════════ */
-const MILE_TYPES={
-  activity:{icon:'🏗',label:'Major Activity',cls:'mt-activity',dot:'dot-bl'},
-  milestone:{icon:'🏆',label:'Milestone',cls:'mt-milestone',dot:'dot-go'},
-  improvement:{icon:'💡',label:'Improvement',cls:'mt-improvement',dot:'dot-gr'},
-  issue:{icon:'⚠️',label:'Issue',cls:'mt-issue',dot:'dot-re'},
-  event:{icon:'🎉',label:'Key Event',cls:'mt-event',dot:'dot-pu'}
-};
-let editMileId=null;
+/* ══════════════════════════════════════════════════
+   MILESTONES
+══════════════════════════════════════════════════ */
 function openMileModal(id=null){
-  editMileId=id;
-  const m=id?milestones.find(x=>x.id===id):null;
+  editMileId=id;const m=id?milestones.find(x=>x.id===id):null;
   document.getElementById('mileMoTtl').textContent=id?'Edit Milestone':'Add Milestone';
-  sv('mDate',m?.date||new Date().toISOString().split('T')[0]);
-  sv('mType',m?.type||'activity');
-  sv('mTitle',m?.title||'');sv('mDesc',m?.desc||'');
+  sv('mDate',m?.date||new Date().toISOString().split('T')[0]);sv('mType',m?.type||'activity');sv('mTitle',m?.title||'');sv('mDesc',m?.desc||'');
   openMo('mileMo');
 }
-function saveMile(){
+async function saveMile(){
   const title=gv('mTitle').trim();if(!title){toast('Enter a title.','wrn');return;}
   const m={id:editMileId||Date.now(),date:gv('mDate'),type:gv('mType'),title:SEC.san(title),desc:SEC.san(gv('mDesc'))};
   if(editMileId){const i=milestones.findIndex(x=>x.id===editMileId);if(i>=0)milestones[i]=m;}
   else milestones.unshift(m);
-  DS.saveM(milestones);closeMo('mileMo');renderMilestones();toast('Milestone saved!','ok');
+  await DB.upsertMilestone(m);closeMo('mileMo');renderMilestones();toast('Milestone saved!','tok');
 }
-function delMile(id){milestones=milestones.filter(m=>m.id!==id);DS.saveM(milestones);renderMilestones();}
+async function delMile(id){milestones=milestones.filter(m=>m.id!==id);await DB.deleteMilestone(id);renderMilestones();}
 function renderMilestones(){
   const el=document.getElementById('mileBody');if(!el)return;
-  if(!milestones.length){el.innerHTML='<div class="mile-empty">No milestones added yet. Click + Add Milestone to track major events.</div>';return;}
-  el.innerHTML=milestones.map((m,i)=>{
-    const t=MILE_TYPES[m.type]||MILE_TYPES.event;
-    return`<div class="mile-item" style="animation-delay:${i*.05}s">
-      <div class="mile-dot ${t.dot}">${t.icon}</div>
-      <div class="mile-info">
-        <div class="mile-date">${fd(m.date)}</div>
-        <div class="mile-name">${m.title}</div>
-        ${m.desc?`<div class="mile-desc">${m.desc}</div>`:''}
-        <span class="mile-type-badge ${t.cls}">${t.label}</span>
-      </div>
-      <div style="display:flex;gap:5px;flex-shrink:0;">
-        <button class="btn bedit" style="font-size:11px;padding:4px 9px;" onclick="openMileModal(${m.id})">Edit</button>
-        <button class="btn bdel" style="font-size:11px;padding:4px 9px;" onclick="delMile(${m.id})">Del</button>
-      </div>
-    </div>`;
-  }).join('');
+  if(!milestones.length){el.innerHTML='<div class="mile-empty">No milestones yet. Click + Add to track major events.</div>';return;}
+  el.innerHTML=milestones.map((m,i)=>{const t=MILE_TYPES[m.type]||MILE_TYPES.event;return`<div class="mile-item" style="animation-delay:${i*.04}s"><div class="mile-dot ${t.dot}">${t.icon}</div><div style="flex:1"><div class="mile-date">${fd(m.date)}</div><div class="mile-name">${m.title}</div>${m.desc?`<div class="mile-desc">${m.desc}</div>`:''}<span class="mile-tybadge ${t.cls}">${t.label}</span></div><div style="display:flex;gap:5px;flex-shrink:0;"><button class="btn bedit" style="font-size:11px;padding:4px 9px;" onclick="openMileModal(${m.id})">Edit</button><button class="btn bdel" style="font-size:11px;padding:4px 9px;" onclick="delMile(${m.id})">Del</button></div></div>`;}).join('');
 }
 
-/* ══════════════ DASHBOARD ══════════════ */
+/* ══════════════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════════════ */
 function renderDash(){
   renderMilestones();
   if(!reports.length){document.getElementById('kpiRow').innerHTML='<div style="color:var(--t3);font-size:13px;font-weight:500;padding:8px;grid-column:1/-1;">Add reports to see analytics.</div>';document.getElementById('insGrid').innerHTML='';return;}
   const tot=reports.reduce((s,r)=>s+r.production.total,0);
   const hsdT=reports.reduce((s,r)=>s+r.hsd,0);
   const bldT=reports.reduce((s,r)=>s+r.boulders.feedingMT,0);
-  const avg=tot/reports.length;
-  const fpm=tot>0?hsdT/tot:0;
+  const avg=tot/reports.length;const fpm=tot>0?hsdT/tot:0;
   const l7=reports.slice(0,7).reduce((s,r)=>s+r.production.total,0)/Math.min(7,reports.length);
   const p7=reports.slice(7,14).length?reports.slice(7,14).reduce((s,r)=>s+r.production.total,0)/reports.slice(7,14).length:l7;
   const trnd=p7>0?((l7-p7)/p7*100):0;
-  const kpis=[
+  document.getElementById('kpiRow').innerHTML=[
     {cls:'go',lbl:'Total Production',val:Math.round(tot).toLocaleString(),unit:'MT'},
     {cls:'gr',lbl:'Avg Daily Output',val:Math.round(avg),unit:'MT',d:trnd,dl:'vs last 7d'},
     {cls:'bl',lbl:'Boulders Fed',val:Math.round(bldT).toLocaleString(),unit:'MT'},
     {cls:'',lbl:'Total HSD',val:hsdT.toLocaleString(),unit:'L'},
-    {cls:'pu',lbl:'Fuel Efficiency',val:fpm.toFixed(2),unit:'L/MT'},
-  ];
-  document.getElementById('kpiRow').innerHTML=kpis.map(k=>`<div class="mc ${k.cls}"><div class="ml">${k.lbl}</div><div class="mv">${k.val}<span class="mu">${k.unit}</span></div>${k.d!==undefined?`<div class="md ${k.d>=0?'up':'dn'}">${k.d>=0?'▲':'▼'} ${Math.abs(k.d).toFixed(1)}% ${k.dl}</div>`:''}</div>`).join('');
-  renderInsights(tot,avg,hsdT,bldT,fpm);
-  renderCharts(tot,hsdT,bldT);
-}
-
-function renderInsights(tot,avg,hsdT,bldT,fpm){
-  const el=document.getElementById('insGrid');
-  const conv=bldT>0?(tot/bldT*100):0;
+    {cls:'pu',lbl:'Fuel Efficiency',val:fpm.toFixed(2),unit:'L/MT'}
+  ].map(k=>`<div class="mc ${k.cls}"><div class="ml">${k.lbl}</div><div class="mv">${k.val}<span class="mu">${k.unit}</span></div>${k.d!==undefined?`<div class="md ${k.d>=0?'up':'dn'}">${k.d>=0?'▲':'▼'} ${Math.abs(k.d).toFixed(1)}% ${k.dl}</div>`:''}</div>`).join('');
+  const conv=bldT>0?(tot/bldT*100):0,brkD=reports.filter(r=>r.plantStatus==='breakdown'||r.plantStatus==='idle').length;
   const r5=reports.slice(0,5),p5=reports.slice(5,10);
   const r5a=r5.reduce((s,r)=>s+r.production.total,0)/Math.max(r5.length,1);
   const p5a=p5.length?p5.reduce((s,r)=>s+r.production.total,0)/p5.length:r5a;
-  const trnd=p5a>0?((r5a-p5a)/p5a*100):0;
-  const brkD=reports.filter(r=>r.plantStatus==='breakdown'||r.plantStatus==='idle').length;
+  const trnd2=p5a>0?((r5a-p5a)/p5a*100):0;
   const maxD=reports.reduce((a,r)=>r.production.total>a?r.production.total:a,0);
-  const cards=[
-    {cls:trnd>=0?'good':'bad',tag:trnd>=0?'▲ Output Improving':'▼ Output Declining',val:Math.abs(trnd).toFixed(1)+'%',txt:`5-day avg vs prior 5. ${trnd>=0?'Production is growing.':'Production declining — review operations.'}`},
+  document.getElementById('insGrid').innerHTML=[
+    {cls:trnd2>=0?'good':'bad',tag:trnd2>=0?'▲ Improving':'▼ Declining',val:Math.abs(trnd2).toFixed(1)+'%',txt:`5-day avg vs prior 5. ${trnd2>=0?'Production growing.':'Review operations.'}`},
     {cls:fpm<2?'good':fpm<3?'warn':'bad',tag:'Fuel Efficiency',val:fpm.toFixed(2)+' L/MT',txt:`${fpm<2?'Excellent.':fpm<3?'Acceptable.':'High — check idle running.'}`},
-    {cls:conv>90?'good':conv>75?'warn':'bad',tag:'Conversion Rate',val:conv.toFixed(1)+'%',txt:`Boulder → aggregate yield. ${conv>90?'Excellent.':conv>75?'Normal.':'Below target — check crusher settings.'}`},
-    {cls:brkD===0?'good':brkD<3?'warn':'bad',tag:'Downtime Days',val:brkD+' days',txt:`${brkD}/${reports.length} days with downtime. ${brkD===0?'Zero downtime!':brkD<3?'Manageable.':'High — maintenance review needed.'}`},
-    {cls:'info',tag:'Peak Day',val:Math.round(maxD)+' MT',txt:`Best single-day production recorded. Aim to replicate consistently.`},
-    {cls:avg>400?'good':avg>200?'warn':'bad',tag:'Avg Daily Output',val:Math.round(avg)+' MT',txt:`${avg>400?'Above target!':avg>200?'Within range.':'Below expected.'}`},
-  ];
-  el.innerHTML=cards.map((c,i)=>`<div class="ic ${c.cls}" style="animation:fadeUp .35s ${i*.05}s var(--bounce) both"><div class="ic-tag">${c.tag}</div><div class="ic-val">${c.val}</div><div class="ic-txt">${c.txt}</div></div>`).join('');
+    {cls:conv>90?'good':conv>75?'warn':'bad',tag:'Conversion Rate',val:conv.toFixed(1)+'%',txt:`Boulder→aggregate yield. ${conv>90?'Excellent.':conv>75?'Normal.':'Below target.'}`},
+    {cls:brkD===0?'good':brkD<3?'warn':'bad',tag:'Downtime Days',val:brkD+' days',txt:`${brkD}/${reports.length} days had downtime. ${brkD===0?'Zero downtime!':brkD<3?'Manageable.':'High — review.'}`},
+    {cls:'info',tag:'Peak Day',val:Math.round(maxD)+' MT',txt:'Best single-day output recorded.'},
+    {cls:avg>400?'good':avg>200?'warn':'bad',tag:'Avg Daily Output',val:Math.round(avg)+' MT',txt:`${avg>400?'Above target!':avg>200?'In range.':'Below expected.'}`}
+  ].map((c,i)=>`<div class="ic ${c.cls}" style="animation:fadeUp .35s ${i*.05}s var(--bounce) both"><div class="ic-tag">${c.tag}</div><div class="ic-val">${c.val}</div><div class="ic-txt">${c.txt}</div></div>`).join('');
+  renderCharts(tot,hsdT);
 }
 
-/* ══════════════ AI ENGINE ══════════════ */
+/* ══════════════════════════════════════════════════
+   AI ENGINE
+══════════════════════════════════════════════════ */
 function runAI(){
   if(!reports.length){toast('Add reports first.','wrn');return;}
   const panel=document.getElementById('aiPanel');panel.style.display='block';
   document.getElementById('aiBd').innerHTML=`<div class="ai-spin"><div class="ai-spn"></div><span style="font-size:13px;color:var(--t2);font-weight:600;">Analysing ${reports.length} reports...</span></div>`;
-  setTimeout(()=>{try{const r=analyseData();renderAI(r);}catch(e){document.getElementById('aiBd').innerHTML=`<div style="text-align:center;padding:20px;color:var(--t3);">Analysis error: ${e.message}</div>`;}},350);
+  setTimeout(()=>{try{const r=analyseData();renderAI(r);}catch(e){document.getElementById('aiBd').innerHTML=`<div style="text-align:center;padding:20px;color:var(--t3);">Error: ${e.message}</div>`;}},350);
 }
 function analyseData(){
-  const tot=reports.reduce((s,r)=>s+r.production.total,0);
-  const avg=tot/reports.length;const hsdT=reports.reduce((s,r)=>s+r.hsd,0);const bldT=reports.reduce((s,r)=>s+r.boulders.feedingMT,0);
-  const fpm=tot>0?hsdT/tot:0;const conv=bldT>0?(tot/bldT*100):0;
-  const brkD=reports.filter(r=>r.plantStatus==='breakdown').length;const idleD=reports.filter(r=>r.plantStatus==='idle').length;
-  const b120=reports.reduce((s,r)=>s+r.plant120.breakdown,0);const b150=reports.reduce((s,r)=>s+r.plant150.breakdown,0);
+  const tot=reports.reduce((s,r)=>s+r.production.total,0),avg=tot/reports.length;
+  const hsdT=reports.reduce((s,r)=>s+r.hsd,0),bldT=reports.reduce((s,r)=>s+r.boulders.feedingMT,0);
+  const fpm=tot>0?hsdT/tot:0,conv=bldT>0?(tot/bldT*100):0;
+  const brkD=reports.filter(r=>r.plantStatus==='breakdown').length,idleD=reports.filter(r=>r.plantStatus==='idle').length;
   const sorted=[...reports].sort((a,b)=>a.date.localeCompare(b.date));const n=sorted.length;
   let sx=0,sy=0,sxy=0,sxx=0;sorted.forEach((r,i)=>{sx+=i;sy+=r.production.total;sxy+=i*r.production.total;sxx+=i*i;});
   const slope=n>1?(n*sxy-sx*sy)/(n*sxx-sx*sx):0;
@@ -958,88 +988,55 @@ function analyseData(){
   if(conv>90)score+=15;else if(conv>75)score+=7;else score-=8;
   if(brkD===0)score+=12;else if(brkD<3)score+=4;else score-=15;
   if(avg>400)score+=8;else if(avg<200)score-=10;
-  if(slope>0)score+=5;else score-=5;
-  score=Math.min(100,Math.max(0,Math.round(score)));
+  score+=slope>0?5:-5;score=Math.min(100,Math.max(0,Math.round(score)));
   const sugs=[];
-  if(fpm>2.5)sugs.push({cat:'Fuel',title:'High diesel consumption',detail:`${fpm.toFixed(2)} L/MT vs 2.0 target. Check plant idle periods and ensure crusher shuts off when feed stops.`,priority:'high',impact:`~${Math.round((fpm-2)*tot)} L savings possible`});
-  if(conv<85)sugs.push({cat:'Conversion',title:'Below-target yield',detail:`${conv.toFixed(1)}% conversion. Adjust jaw crusher gap and check screen mesh condition.`,priority:conv<75?'high':'medium',impact:`+5% = ${Math.round(bldT*.05)} MT extra`});
-  if(brkD>2)sugs.push({cat:'Maintenance',title:'High breakdown frequency',detail:`${brkD} breakdown days. Implement weekly PM schedule for 120T and 150T plants.`,priority:'high',impact:`+${Math.round(avg*2)} MT from 2 fewer breakdowns`});
-  if(idleD>1)sugs.push({cat:'Workforce',title:'Idle days from operator shortage',detail:`${idleD} idle days detected. Maintain standby operators for night shifts.`,priority:'medium',impact:`~${Math.round(avg*idleD)} MT recovery`});
-  if(slope<0&&n>7)sugs.push({cat:'Trend',title:'Production declining over time',detail:`Output falling at ${Math.abs(slope).toFixed(1)} MT/day. Investigate equipment wear or feed issues.`,priority:'high',impact:`${Math.round(Math.abs(slope)*7)} MT/week recovery potential`});
-  if(sugs.length<3)sugs.push({cat:'Optimisation',title:'Run both plants simultaneously',detail:`Maximise dual-plant operation (120T + 150T = 270 TPH capacity) during all available shift hours.`,priority:'low',impact:'Up to 270 MT/hr throughput'});
-  const forecast=`Based on ${n} days of data, next 7-day output is estimated at ~${Math.max(0,Math.round((avg+(slope*7))*7)).toLocaleString()} MT. ${slope>=0?'Positive trend is encouraging.':'Declining trend requires intervention.'}`;
-  const headline=score>=75?`Strong performance at ${score}/100 — focus on fuel and consistency.`:score>=55?`Moderate performance (${score}/100) — fuel and downtime need attention.`:`Performance at ${score}/100 requires urgent action on breakdowns and efficiency.`;
-  return{score,headline,forecast,topRisk:brkD>2?`Frequent breakdowns (${brkD} days) threaten continuity.`:fpm>3?`Fuel at ${fpm.toFixed(2)} L/MT is impacting economics.`:`Trend is ${slope>=0?'positive':'declining'} at ${Math.abs(slope).toFixed(1)} MT/day.`,quickWin:idleD>0?`Eliminate ${idleD} idle days with standby operators = ~${Math.round(avg*idleD)} MT extra.`:fpm>2?'Shut down equipment immediately when boulder feed stops.':'Ensure 150T plant runs full night shift.',suggestions:sugs};
+  if(fpm>2.5)sugs.push({cat:'Fuel',title:'High diesel consumption',detail:`${fpm.toFixed(2)} L/MT vs 2.0 target. Check plant idle periods.`,priority:'high',impact:`~${Math.round((fpm-2)*tot)} L savings`});
+  if(conv<85)sugs.push({cat:'Conversion',title:'Below-target yield',detail:`${conv.toFixed(1)}% conversion. Adjust jaw crusher gap and screen mesh.`,priority:conv<75?'high':'medium',impact:`+5% = ${Math.round(bldT*.05)} MT extra`});
+  if(brkD>2)sugs.push({cat:'Maintenance',title:'Excessive breakdowns',detail:`${brkD} breakdown days. Implement weekly preventive maintenance.`,priority:'high',impact:`+${Math.round(avg*2)} MT from 2 fewer breakdowns`});
+  if(idleD>1)sugs.push({cat:'Workforce',title:'Idle days from staff shortage',detail:`${idleD} idle days. Maintain standby operators for night shifts.`,priority:'medium',impact:`~${Math.round(avg*idleD)} MT recovery`});
+  if(slope<0&&n>7)sugs.push({cat:'Trend',title:'Production trend declining',detail:`Output falling ${Math.abs(slope).toFixed(1)} MT/day. Investigate equipment wear.`,priority:'high',impact:`${Math.round(Math.abs(slope)*7)} MT/week recovery`});
+  if(sugs.length<3)sugs.push({cat:'Optimisation',title:'Run both plants simultaneously',detail:'Maximise dual-plant (120T + 150T = 270 TPH) during all shift hours.',priority:'low',impact:'Up to 270 MT/hr throughput'});
+  const f=`${n} days of data forecast next 7 days at ~${Math.max(0,Math.round((avg+(slope*7))*7)).toLocaleString()} MT. ${slope>=0?'Positive trend.':'Declining trend needs action.'}`;
+  return{score,headline:score>=75?`Strong ops at ${score}/100 — maintain efficiency.`:score>=55?`Moderate (${score}/100) — fuel & downtime need work.`:`Performance at ${score}/100 needs urgent action.`,forecast:f,topRisk:brkD>2?`Frequent breakdowns (${brkD} days).`:fpm>3?`Fuel at ${fpm.toFixed(2)} L/MT impacting costs.`:`Trend ${slope>=0?'positive':'declining'}.`,quickWin:idleD>0?`Eliminate ${idleD} idle days with standby operators.`:fpm>2?'Shut down equipment when feed stops.':'Run 150T plant full night shift.',suggestions:sugs};
 }
 function renderAI(ai){
   const sc=ai.score,scC=sc>=75?'var(--green)':sc>=55?'var(--gold)':'var(--red)';
   const pm={high:'hi',medium:'md',low:'lo'};
-  document.getElementById('aiBd').innerHTML=`
-    <div class="ai-sr">
-      <div class="ai-score"><div class="ai-sn" style="color:${scC}">${sc}</div><div class="ai-sl">Health Score</div></div>
-      <div class="ai-hl">${ai.headline}</div>
-    </div>
-    <div class="ai-cards">
-      <div class="ai-c" style="border-color:rgba(74,158,255,0.2)"><div class="ai-ct" style="color:var(--blue)">7-Day Forecast</div><div class="ai-cv">${ai.forecast}</div></div>
-      <div class="ai-c" style="border-color:rgba(255,82,82,0.2)"><div class="ai-ct" style="color:var(--red)">⚠ Top Risk</div><div class="ai-cv">${ai.topRisk}</div></div>
-      <div class="ai-c" style="border-color:rgba(45,213,122,0.2)"><div class="ai-ct" style="color:var(--green)">⚡ Quick Win</div><div class="ai-cv">${ai.quickWin}</div></div>
-    </div>
-    <div style="font-family:var(--m);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-weight:600;">Recommendations (${ai.suggestions.length})</div>
-    ${ai.suggestions.map((s,i)=>`<div class="ai-sg" style="animation-delay:${i*.06}s"><div style="flex:1"><div class="ai-sg-cat">${s.cat}</div><div class="ai-sg-ttl">${s.title}</div><div class="ai-sg-txt">${s.detail}</div><div class="ai-sg-imp">📈 ${s.impact}</div></div><span class="pri ${pm[s.priority]||'lo'}">${s.priority.toUpperCase()}</span></div>`).join('')}`;
+  document.getElementById('aiBd').innerHTML=`<div class="ai-sr"><div class="ai-score"><div class="ai-sn" style="color:${scC}">${sc}</div><div class="ai-sl">Health Score</div></div><div class="ai-hl">${ai.headline}</div></div>
+  <div class="ai-cards"><div class="ai-c" style="border-color:rgba(74,158,255,.2)"><div class="ai-ct" style="color:var(--blue)">7-Day Forecast</div><div class="ai-cv">${ai.forecast}</div></div><div class="ai-c" style="border-color:rgba(255,82,82,.2)"><div class="ai-ct" style="color:var(--red)">⚠ Top Risk</div><div class="ai-cv">${ai.topRisk}</div></div><div class="ai-c" style="border-color:rgba(45,213,122,.2)"><div class="ai-ct" style="color:var(--green)">⚡ Quick Win</div><div class="ai-cv">${ai.quickWin}</div></div></div>
+  <div style="font-family:var(--m);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-weight:600;">Recommendations (${ai.suggestions.length})</div>
+  ${ai.suggestions.map((s,i)=>`<div class="ai-sg" style="animation-delay:${i*.06}s"><div style="flex:1"><div class="ai-sg-cat">${s.cat}</div><div class="ai-sg-ttl">${s.title}</div><div class="ai-sg-txt">${s.detail}</div><div class="ai-sg-imp">📈 ${s.impact}</div></div><span class="pri ${pm[s.priority]||'lo'}">${s.priority.toUpperCase()}</span></div>`).join('')}`;
 }
 
-/* ══════════════ CHARTS ══════════════ */
-function tc(){const d=document.documentElement.getAttribute('data-theme')==='dark';return{grid:d?'rgba(255,255,255,0.05)':'rgba(30,50,100,0.07)',text:d?'rgba(155,170,207,0.7)':'rgba(46,63,96,0.6)',f:{family:'JetBrains Mono',size:9,weight:'500'}};}
+/* ══════════════════════════════════════════════════
+   CHARTS
+══════════════════════════════════════════════════ */
+function tc(){const d=document.documentElement.getAttribute('data-theme')==='dark';return{grid:d?'rgba(255,255,255,.05)':'rgba(20,40,100,.07)',text:d?'rgba(155,170,207,.7)':'rgba(40,60,100,.5)',f:{family:'JetBrains Mono',size:9,weight:'500'}};}
 function dc(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
-
-function renderCharts(tot,hsdT,bldT){
+function renderCharts(tot,hsdT){
   const t=tc();
   const sorted=[...reports].sort((a,b)=>a.date.localeCompare(b.date)).slice(-30);
-  const lbl=sorted.map(r=>fds(r.date));
-  const pd=sorted.map(r=>r.production.total);
-  const sand=reports.reduce((s,r)=>s+r.production.sand,0);
-  const mm10=reports.reduce((s,r)=>s+r.production['10mm'],0);
-  const mm20=reports.reduce((s,r)=>s+r.production['20mm'],0);
-  const mm80=reports.reduce((s,r)=>s+r.production['80mm'],0);
-  const mixColors=['#4a9eff','#f5a623','#b57bee','#2dd57a'];
-  const mixVals=[sand,mm10,mm20,mm80];
-  const mixLabels=['Sand','10mm','20mm','80mm'];
-
-  dc('trendC');
-  charts['trendC']=new Chart(document.getElementById('trendC'),{type:'line',data:{labels:lbl,datasets:[{label:'MT',data:pd,borderColor:'#f5a623',backgroundColor:'rgba(245,166,35,0.08)',fill:true,tension:0.45,pointRadius:4,pointBackgroundColor:'#f5a623',pointBorderColor:document.documentElement.getAttribute('data-theme')==='dark'?'#06090f':'#dfe4f0',pointBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:t.grid},ticks:{color:t.text,maxRotation:45,font:t.f}},y:{grid:{color:t.grid},ticks:{color:t.text,font:t.f,callback:n=>n+' MT'}}}}});
-
-  // Mix chart with value list
-  dc('mixC');
-  charts['mixC']=new Chart(document.getElementById('mixC'),{type:'doughnut',data:{labels:mixLabels,datasets:[{data:mixVals,backgroundColor:mixColors,borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
-  // Value list
-  const mixValsEl=document.getElementById('mixVals');
-  mixValsEl.innerHTML=mixLabels.map((l,i)=>{const v=mixVals[i];const pct=tot>0?(v/tot*100).toFixed(1):'0';return`<div class="mix-row"><div class="mix-dot" style="background:${mixColors[i]}"></div><span class="mix-lbl">${l}</span><div><span class="mix-val">${Math.round(v).toLocaleString()}</span>&nbsp;<span class="mix-pct">${pct}%</span></div></div>`;}).join('');
-
-  dc('hsdC');
-  charts['hsdC']=new Chart(document.getElementById('hsdC'),{type:'bar',data:{labels:lbl,datasets:[{label:'HSD (L)',data:sorted.map(r=>r.hsd),backgroundColor:'rgba(255,82,82,0.5)',borderColor:'#ff5252',borderWidth:1,yAxisID:'y',borderRadius:3},{label:'Prod (MT)',data:pd,type:'line',borderColor:'#f5a623',backgroundColor:'transparent',yAxisID:'y1',tension:0.4,pointRadius:2,pointBackgroundColor:'#f5a623'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:t.text,font:t.f,padding:7,boxWidth:8}}},scales:{x:{grid:{color:t.grid},ticks:{color:t.text,maxRotation:45,font:t.f}},y:{grid:{color:t.grid},ticks:{color:t.text,font:t.f}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:t.text,font:t.f}}}}});
-
+  const lbl=sorted.map(r=>fds(r.date)),pd=sorted.map(r=>r.production.total);
+  const sand=reports.reduce((s,r)=>s+r.production.sand,0),mm10=reports.reduce((s,r)=>s+r.production['10mm'],0),mm20=reports.reduce((s,r)=>s+r.production['20mm'],0),mm80=reports.reduce((s,r)=>s+r.production['80mm'],0);
+  const mixC=['#4a9eff','#f5a623','#b57bee','#2dd57a'],mixV=[sand,mm10,mm20,mm80],mixL=['Sand','10mm','20mm','80mm'];
+  dc('trendC');charts['trendC']=new Chart(document.getElementById('trendC'),{type:'line',data:{labels:lbl,datasets:[{label:'MT',data:pd,borderColor:'#f5a623',backgroundColor:'rgba(245,166,35,.08)',fill:true,tension:0.45,pointRadius:4,pointBackgroundColor:'#f5a623',pointBorderColor:document.documentElement.getAttribute('data-theme')==='dark'?'#060b15':'#dde3f2',pointBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:t.grid},ticks:{color:t.text,maxRotation:45,font:t.f}},y:{grid:{color:t.grid},ticks:{color:t.text,font:t.f,callback:n=>n+' MT'}}}}});
+  dc('mixC');charts['mixC']=new Chart(document.getElementById('mixC'),{type:'doughnut',data:{labels:mixL,datasets:[{data:mixV,backgroundColor:mixC,borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
+  document.getElementById('mixVals').innerHTML=mixL.map((l,i)=>{const v=mixV[i],pct=tot>0?(v/tot*100).toFixed(1):'0';return`<div class="mix-row"><div class="mix-dot" style="background:${mixC[i]}"></div><span class="mix-lbl">${l}</span><div><span class="mix-val">${Math.round(v).toLocaleString()}</span>&nbsp;<span class="mix-pct">${pct}%</span></div></div>`;}).join('');
+  dc('hsdC');charts['hsdC']=new Chart(document.getElementById('hsdC'),{type:'bar',data:{labels:lbl,datasets:[{label:'HSD (L)',data:sorted.map(r=>r.hsd),backgroundColor:'rgba(255,82,82,.5)',borderColor:'#ff5252',borderWidth:1,yAxisID:'y',borderRadius:3},{label:'Prod (MT)',data:pd,type:'line',borderColor:'#f5a623',backgroundColor:'transparent',yAxisID:'y1',tension:.4,pointRadius:2,pointBackgroundColor:'#f5a623'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:t.text,font:t.f,padding:7,boxWidth:8}}},scales:{x:{grid:{color:t.grid},ticks:{color:t.text,maxRotation:45,font:t.f}},y:{grid:{color:t.grid},ticks:{color:t.text,font:t.f}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:t.text,font:t.f}}}}});
   const sc={};reports.forEach(r=>sc[r.plantStatus]=(sc[r.plantStatus]||0)+1);
-  dc('statC');
-  charts['statC']=new Chart(document.getElementById('statC'),{type:'pie',data:{labels:Object.keys(sc),datasets:[{data:Object.values(sc),backgroundColor:['#2dd57a','#f5a623','#ff5252','#ff2d55','#b57bee'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:t.text,font:t.f,padding:9,boxWidth:8}}}}});
-
-  dc('brkC');
-  charts['brkC']=new Chart(document.getElementById('brkC'),{type:'bar',data:{labels:lbl,datasets:[{label:'120T',data:sorted.map(r=>r.plant120.breakdown),backgroundColor:'rgba(255,82,82,0.6)',borderRadius:3,stack:'a'},{label:'150T',data:sorted.map(r=>r.plant150.breakdown),backgroundColor:'rgba(181,123,238,0.6)',borderRadius:3,stack:'a'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:t.text,font:t.f,padding:7,boxWidth:8}}},scales:{x:{stacked:true,grid:{color:t.grid},ticks:{color:t.text,maxRotation:45,font:t.f}},y:{stacked:true,grid:{color:t.grid},ticks:{color:t.text,font:t.f,callback:n=>n+'h'}}}}});
-
+  dc('statC');charts['statC']=new Chart(document.getElementById('statC'),{type:'pie',data:{labels:Object.keys(sc),datasets:[{data:Object.values(sc),backgroundColor:['#2dd57a','#f5a623','#ff5252','#ff2d55','#b57bee'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:t.text,font:t.f,padding:9,boxWidth:8}}}}});
+  dc('brkC');charts['brkC']=new Chart(document.getElementById('brkC'),{type:'bar',data:{labels:lbl,datasets:[{label:'120T',data:sorted.map(r=>r.plant120.breakdown),backgroundColor:'rgba(255,82,82,.6)',borderRadius:3,stack:'a'},{label:'150T',data:sorted.map(r=>r.plant150.breakdown),backgroundColor:'rgba(181,123,238,.6)',borderRadius:3,stack:'a'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:t.text,font:t.f,padding:7,boxWidth:8}}},scales:{x:{stacked:true,grid:{color:t.grid},ticks:{color:t.text,maxRotation:45,font:t.f}},y:{stacked:true,grid:{color:t.grid},ticks:{color:t.text,font:t.f,callback:n=>n+'h'}}}}});
   const roll=sorted.map((_,i,a)=>{const sl=a.slice(Math.max(0,i-6),i+1);return sl.reduce((s,x)=>s+x.production.total,0)/sl.length;});
-  dc('rollC');
-  charts['rollC']=new Chart(document.getElementById('rollC'),{type:'line',data:{labels:lbl,datasets:[{label:'7-Day Avg',data:roll,borderColor:'#2dd57a',backgroundColor:'rgba(45,213,122,0.08)',fill:true,tension:0.5,pointRadius:3,pointBackgroundColor:'#2dd57a'},{label:'Daily',data:pd,borderColor:'rgba(155,170,207,0.3)',backgroundColor:'transparent',tension:0.3,pointRadius:2,borderDash:[3,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:t.text,font:t.f,padding:7,boxWidth:8}}},scales:{x:{grid:{color:t.grid},ticks:{color:t.text,maxRotation:45,font:t.f}},y:{grid:{color:t.grid},ticks:{color:t.text,font:t.f,callback:n=>n+' MT'}}}}});
-
-  // Progress bars
-  const pbEl=document.getElementById('pbBars');const maxV=Math.max(sand,mm10,mm20,mm80,1);
-  pbEl.innerHTML=[['Sand',sand,'#4a9eff'],['10mm',mm10,'#f5a623'],['20mm',mm20,'#b57bee'],['80mm',mm80,'#2dd57a']].map(([l,v,c])=>`<div class="pb"><div class="pb-top"><span class="pb-lbl">${l}</span><span class="pb-val">${Math.round(v).toLocaleString()} MT · ${tot>0?(v/tot*100).toFixed(1):'0'}%</span></div><div class="pb-tr"><div class="pb-f" style="width:${(v/maxV*100).toFixed(1)}%;background:${c};"></div></div></div>`).join('');
-
-  // Heatmap
-  const hmEl=document.getElementById('hmap');const last42=[...reports].sort((a,b)=>a.date.localeCompare(b.date)).slice(-42);
-  const maxP=Math.max(...last42.map(r=>r.production.total),1);
-  hmEl.innerHTML=last42.map(r=>{const p=r.production.total/maxP;const a=0.15+p*0.85;const c=p>0.7?`rgba(245,166,35,${a})`:p>0.4?`rgba(74,158,255,${a})`:`rgba(45,213,122,${a})`;return`<div class="hc" style="background:${r.production.total?c:'var(--bd)'};" title="${fds(r.date)}: ${r.production.total.toFixed(1)} MT"></div>`;}).join('');
+  dc('rollC');charts['rollC']=new Chart(document.getElementById('rollC'),{type:'line',data:{labels:lbl,datasets:[{label:'7-Day Avg',data:roll,borderColor:'#2dd57a',backgroundColor:'rgba(45,213,122,.08)',fill:true,tension:.5,pointRadius:3,pointBackgroundColor:'#2dd57a'},{label:'Daily',data:pd,borderColor:'rgba(155,170,207,.3)',backgroundColor:'transparent',tension:.3,pointRadius:2,borderDash:[3,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:t.text,font:t.f,padding:7,boxWidth:8}}},scales:{x:{grid:{color:t.grid},ticks:{color:t.text,maxRotation:45,font:t.f}},y:{grid:{color:t.grid},ticks:{color:t.text,font:t.f,callback:n=>n+' MT'}}}}});
+  const pbEl=document.getElementById('pbBars'),maxV=Math.max(sand,mm10,mm20,mm80,1);
+  pbEl.innerHTML=[['Sand',sand,'#4a9eff'],['10mm',mm10,'#f5a623'],['20mm',mm20,'#b57bee'],['80mm',mm80,'#2dd57a']].map(([l,v,c])=>`<div class="pb"><div class="pb-top"><span class="pb-lbl">${l}</span><span class="pb-val">${Math.round(v).toLocaleString()} MT · ${tot>0?(v/tot*100).toFixed(1):0}%</span></div><div class="pb-tr"><div class="pb-f" style="width:${(v/maxV*100).toFixed(1)}%;background:${c};"></div></div></div>`).join('');
+  const hmEl=document.getElementById('hmap'),last42=[...reports].sort((a,b)=>a.date.localeCompare(b.date)).slice(-42),maxP=Math.max(...last42.map(r=>r.production.total),1);
+  hmEl.innerHTML=last42.map(r=>{const p=r.production.total/maxP,a=.15+p*.85,c=p>.7?`rgba(245,166,35,${a})`:p>.4?`rgba(74,158,255,${a})`:`rgba(45,213,122,${a})`;return`<div class="hc" style="background:${r.production.total?c:'var(--bd)'}" title="${fds(r.date)}: ${r.production.total.toFixed(1)} MT"></div>`;}).join('');
 }
 
-/* ══════════════ PERIOD REPORTS ══════════════ */
+/* ══════════════════════════════════════════════════
+   PERIOD REPORTS
+══════════════════════════════════════════════════ */
 function swP(p,el){period=p;document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderRpt();}
 function grpKey(r){const d=new Date(r.date+'T00:00:00');if(period==='daily')return r.date;if(period==='monthly')return d.toLocaleDateString('en-IN',{year:'numeric',month:'long'});if(period==='quarterly'){const q=Math.ceil((d.getMonth()+1)/3);return`Q${q} – ${d.getFullYear()}`;}return String(d.getFullYear());}
 function renderRpt(){
@@ -1050,197 +1047,199 @@ function renderRpt(){
     el.innerHTML=Object.keys(groups).sort((a,b)=>b.localeCompare(a)).map(key=>{
       const r=groups[key][0];
       return`<div class="rblock"><div class="rb-hdr"><div><div class="rb-key">${fd(r.date)}</div><div class="rb-meta">${r.site} · ${r.shift} · ${r.preparedBy||'—'} · ${SLBL[r.plantStatus]}</div></div><div style="display:flex;gap:8px;"><button class="btn bpdf" onclick="expSingle(${r.id})">⬇ PDF</button>${CU?.role==='employee'?`<button class="btn bedit" onclick="loadEdit(${r.id})">Edit</button>`:''}</div></div>
-      <div class="rsm" style="grid-template-columns:repeat(6,1fr)">
-        ${[['Today Prod.',r.production.total.toFixed(1)+' MT'],['Sand',r.production.sand.toFixed(1)+' MT'],['10mm',r.production['10mm'].toFixed(1)+' MT'],['20mm',r.production['20mm'].toFixed(1)+' MT'],['80mm',r.production['80mm'].toFixed(1)+' MT'],['HSD',r.hsd.toLocaleString()+' L'],
-           ['Boulder Fed',r.boulders.feedingMT.toFixed(1)+' MT'],['Feed Trips',r.boulders.feedingTrips],['120T Run',(r.plant120.day+r.plant120.night).toFixed(1)+' h'],['120T Brkdn',r.plant120.breakdown.toFixed(1)+' h'],['150T Run',(r.plant150.day+r.plant150.night).toFixed(1)+' h'],['150T Brkdn',r.plant150.breakdown.toFixed(1)+' h']
-        ].map(([l,v])=>`<div class="rsc"><div class="rsl">${l}</div><div class="rsv">${v}</div></div>`).join('')}
-      </div>
+      <div class="rsm" style="grid-template-columns:repeat(6,1fr)">${[['Today Prod.',r.production.total.toFixed(1)+' MT'],['Sand',r.production.sand.toFixed(1)+' MT'],['10mm',r.production['10mm'].toFixed(1)+' MT'],['20mm',r.production['20mm'].toFixed(1)+' MT'],['80mm',r.production['80mm'].toFixed(1)+' MT'],['HSD',r.hsd.toLocaleString()+' L'],['Boulder Fed',r.boulders.feedingMT.toFixed(1)+' MT'],['Feed Trips',r.boulders.feedingTrips],['120T Run',(r.plant120.day+r.plant120.night).toFixed(1)+' h'],['120T Brkdn',r.plant120.breakdown.toFixed(1)+' h'],['150T Run',(r.plant150.day+r.plant150.night).toFixed(1)+' h'],['150T Brkdn',r.plant150.breakdown.toFixed(1)+' h']].map(([l,v])=>`<div class="rsc"><div class="rsl">${l}</div><div class="rsv">${v}</div></div>`).join('')}</div>
       ${r.remarks?`<div style="padding:11px 18px;font-size:13px;color:var(--t2);border-top:1px solid var(--bd);font-weight:500;"><span style="font-family:var(--m);font-size:9px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-right:9px;font-weight:600;">Remarks</span>${r.remarks}</div>`:''}
-    </div>`;
+      </div>`;
     }).join('');return;
   }
   el.innerHTML=Object.keys(groups).sort((a,b)=>b.localeCompare(a)).map(key=>{
     const g=groups[key];
     const tot=g.reduce((s,r)=>s+r.production.total,0),sand=g.reduce((s,r)=>s+r.production.sand,0),mm10=g.reduce((s,r)=>s+r.production['10mm'],0),mm20=g.reduce((s,r)=>s+r.production['20mm'],0),mm80=g.reduce((s,r)=>s+r.production['80mm'],0);
-    const hsd=g.reduce((s,r)=>s+r.hsd,0),bld=g.reduce((s,r)=>s+r.boulders.feedingMT,0);
-    const b120=g.reduce((s,r)=>s+r.plant120.breakdown,0),b150=g.reduce((s,r)=>s+r.plant150.breakdown,0);
+    const hsd=g.reduce((s,r)=>s+r.hsd,0),bld=g.reduce((s,r)=>s+r.boulders.feedingMT,0),b120=g.reduce((s,r)=>s+r.plant120.breakdown,0),b150=g.reduce((s,r)=>s+r.plant150.breakdown,0);
     const avg=tot/g.length,fpm=tot>0?hsd/tot:0,conv=bld>0?(tot/bld*100):0;
     return`<div class="rblock"><div class="rb-hdr"><div><div class="rb-key">${key}</div><div class="rb-meta">${g.length} days · Avg ${Math.round(avg)} MT/day · Fuel ${fpm.toFixed(2)} L/MT · Conv ${conv.toFixed(1)}%</div></div><span class="badge bg-a">${Math.round(tot).toLocaleString()} MT</span></div>
-    <div class="rsm">${[['Total Prod.',Math.round(tot).toLocaleString()+' MT'],['Avg/Day',Math.round(avg)+' MT'],['HSD',hsd.toLocaleString()+' L'],['Boulders Fed',Math.round(bld)+' MT'],['Fuel/MT',fpm.toFixed(2)+' L'],['Conv%',conv.toFixed(1)+'%'],['Sand',Math.round(sand)+' MT'],['10mm',Math.round(mm10)+' MT'],['20mm',Math.round(mm20)+' MT'],['80mm',Math.round(mm80)+' MT'],['120T Brkdn',b120.toFixed(1)+' h'],['150T Brkdn',b150.toFixed(1)+' h']].map(([l,v])=>`<div class="rsc"><div class="rsl">${l}</div><div class="rsv">${v}</div></div>`).join('')}</div>
-    <table style="margin:0"><thead><tr><th>Date</th><th>Today MT</th><th>Sand</th><th>10mm</th><th>20mm</th><th>80mm</th><th>HSD</th><th>Status</th><th>Remarks</th></tr></thead>
-    <tbody>${g.sort((a,b)=>b.date.localeCompare(a.date)).map(r=>`<tr><td>${fd(r.date)}</td><td class="tgold">${r.production.total.toFixed(1)}</td><td>${r.production.sand.toFixed(1)}</td><td>${r.production['10mm'].toFixed(1)}</td><td>${r.production['20mm'].toFixed(1)}</td><td>${r.production['80mm'].toFixed(1)}</td><td>${r.hsd.toLocaleString()}</td><td><span class="badge ${SCLS[r.plantStatus]}">${SLBL[r.plantStatus]}</span></td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.remarks||'—'}</td></tr>`).join('')}</tbody></table></div>`;
+    <div class="rsm">${[['Total',Math.round(tot).toLocaleString()+' MT'],['Avg/Day',Math.round(avg)+' MT'],['HSD',hsd.toLocaleString()+' L'],['Boulders',Math.round(bld)+' MT'],['Fuel/MT',fpm.toFixed(2)+' L'],['Conv%',conv.toFixed(1)+'%'],['Sand',Math.round(sand)+' MT'],['10mm',Math.round(mm10)+' MT'],['20mm',Math.round(mm20)+' MT'],['80mm',Math.round(mm80)+' MT'],['120T Brkdn',b120.toFixed(1)+' h'],['150T Brkdn',b150.toFixed(1)+' h']].map(([l,v])=>`<div class="rsc"><div class="rsl">${l}</div><div class="rsv">${v}</div></div>`).join('')}</div>
+    <table style="margin:0"><thead><tr><th>Date</th><th>Today MT</th><th>Sand</th><th>10mm</th><th>20mm</th><th>80mm</th><th>HSD</th><th>Status</th></tr></thead>
+    <tbody>${g.sort((a,b)=>b.date.localeCompare(a.date)).map(r=>`<tr><td>${fd(r.date)}</td><td class="tgold">${r.production.total.toFixed(1)}</td><td>${r.production.sand.toFixed(1)}</td><td>${r.production['10mm'].toFixed(1)}</td><td>${r.production['20mm'].toFixed(1)}</td><td>${r.production['80mm'].toFixed(1)}</td><td>${r.hsd.toLocaleString()}</td><td><span class="badge ${SCLS[r.plantStatus]}">${SLBL[r.plantStatus]}</span></td></tr>`).join('')}</tbody>
+    </table></div>`;
   }).join('');
 }
 
-/* ══════════════ OFFICIAL REPORT CONFIG ══════════════ */
+/* ══════════════════════════════════════════════════
+   SETUP MODAL
+══════════════════════════════════════════════════ */
+function openSetupModal(){
+  document.getElementById('connStatus').textContent = sbReady ? '✅ Connected' : '❌ Not connected — run SQL setup';
+  openMo('setupMo');
+}
+function copySql(){navigator.clipboard.writeText(document.getElementById('sqlBox').textContent).then(()=>toast('SQL copied!','tok'));}
+async function testConn(){
+  document.getElementById('connStatus').textContent='Testing...';
+  await initSupabase();
+  document.getElementById('connStatus').textContent=sbReady?'✅ Connected successfully!':'❌ Not connected — check if SQL was run';
+  toast(sbReady?'Connection OK ✅':'Connection failed — run SQL setup',sbReady?'tok':'ter');
+}
+
+/* ══════════════════════════════════════════════════
+   OFFICIAL PDF — Matches Vensar format exactly
+══════════════════════════════════════════════════ */
 function populateOfcDates(){
   const sel=document.getElementById('ofcDate');if(!sel)return;
   sel.innerHTML=reports.map(r=>`<option value="${r.date}">${fd(r.date)} — ${r.site}</option>`).join('');
 }
 function openOfficialRpt(){
-  if(!reports.length){toast('No reports available to generate.','wrn');return;}
+  if(!reports.length){toast('No reports to generate from.','wrn');return;}
   populateOfcDates();
-  const today=new Date();const firstOfMonth=new Date(today.getFullYear(),today.getMonth(),1);
-  sv('ofcFrom',firstOfMonth.toISOString().split('T')[0]);
+  const today=new Date(),fom=new Date(today.getFullYear(),today.getMonth(),1);
+  sv('ofcFrom',fom.toISOString().split('T')[0]);
   openMo('ofcMo');
 }
 function genOfficialPDF(){
-  const rptDate=gv('ofcDate');if(!rptDate){toast('Select a report date.','wrn');return;}
-  const todayRec=reports.find(r=>r.date===rptDate);if(!todayRec){toast('No record for selected date.','err');return;}
+  const rptDate=gv('ofcDate');if(!rptDate){toast('Select a date.','wrn');return;}
+  const rec=reports.find(r=>r.date===rptDate);if(!rec){toast('No record for this date.','err');return;}
   const periodFrom=gv('ofcFrom');
-  // Cumulative totals
   const periodRecs=reports.filter(r=>r.date>=periodFrom&&r.date<=rptDate);
   const cumTot={sand:periodRecs.reduce((s,r)=>s+r.production.sand,0),'10mm':periodRecs.reduce((s,r)=>s+r.production['10mm'],0),'20mm':periodRecs.reduce((s,r)=>s+r.production['20mm'],0),'80mm':periodRecs.reduce((s,r)=>s+r.production['80mm'],0)};
   const cumBoulder=periodRecs.reduce((s,r)=>s+r.boulders.collectedMT,0);
-  // Stock balances (override or from record)
-  const sb={
-    sand: flt(gv('obSand'))||todayRec.stockBalance?.sand||0,
-    '10mm': flt(gv('ob10'))||todayRec.stockBalance?.['10mm']||0,
-    '20mm': flt(gv('ob20'))||todayRec.stockBalance?.['20mm']||0,
-    '80mm': flt(gv('ob80'))||todayRec.stockBalance?.['80mm']||0,
-    boulder: flt(gv('obBld'))||todayRec.stockBalance?.boulder||0
+  const sb2={
+    sand:flt(gv('obSand'))||rec.stockBalance?.sand||0,
+    '10mm':flt(gv('ob10'))||rec.stockBalance?.['10mm']||0,
+    '20mm':flt(gv('ob20'))||rec.stockBalance?.['20mm']||0,
+    '80mm':flt(gv('ob80'))||rec.stockBalance?.['80mm']||0,
+    boulder:flt(gv('obBld'))||rec.stockBalance?.boulder||0
   };
-  const site=gv('ofcSite')||todayRec.site;const prepBy=gv('ofcPrepBy')||todayRec.preparedBy||'—';
-  buildOfficialPDF(todayRec,periodFrom,rptDate,cumTot,cumBoulder,sb,site,prepBy);
+  buildOfficialPDF(rec,periodFrom,rptDate,cumTot,cumBoulder,sb2,gv('ofcSite')||rec.site,gv('ofcPrepBy')||rec.preparedBy||'—');
   closeMo('ofcMo');
 }
 
-/* ══════════════ OFFICIAL PDF — MATCHES IMAGE EXACTLY ══════════════ */
-function buildOfficialPDF(rec,periodFrom,rptDate,cumTot,cumBoulder,sb,site,prepBy){
+function buildOfficialPDF(rec,periodFrom,rptDate,cumTot,cumBoulder,sb2,site,prepBy){
   try{
-    if(!window.jspdf){toast('PDF library not loaded. Please refresh.','err');return;}
-    const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-    const PW=297,PH=210;
-    const ML=8,MT=8;const CW=PW-ML*2;
+    if(!window.jspdf){toast('PDF library not loaded.','err');return;}
+    const jsPDFClass=window.jspdf.jsPDF||window.jspdf;
+    if(!jsPDFClass){toast('jsPDF not found.','err');return;}
+    // Use simple positional args — most compatible
+    const doc=new jsPDFClass('l','mm','a4');
+    const PW=297,PH=210,ML=8,MT=8;
+    const CW=PW-ML*2; // 281
 
-    // Column widths
-    const CWS=[12,32,40,38,22,24,24,24,32,33]; // total = 281 ✓
+    // Columns: SL,Material,TotalProd,TodayProd,P1,ADIT-1,MainP2,T28,TotalShifted,StockBalance
+    const CWS=[12,33,42,40,22,24,24,24,34,26];
     let cx=ML;const CX=CWS.map(w=>{const x=cx;cx+=w;return x;});
 
-    // ── HELPER: draw bordered cell ──
-    function cell(x,y,w,h,text,{bold=false,size=9,color=[20,20,30],bg=null,align='center',vpad=0}={}){
-      doc.setDrawColor(50,80,130);doc.setLineWidth(0.4);
-      if(bg){doc.setFillColor(...bg);doc.rect(x,y,w,h,'FD');}else{doc.rect(x,y,w,h,'D');}
-      if(!text&&text!==0)return;
-      doc.setFont('helvetica',bold?'bold':'normal');doc.setFontSize(size);doc.setTextColor(...color);
-      const lines=doc.splitTextToSize(String(text),w-2);
-      const lh=size*0.38;const totalH=lines.length*lh;
-      const ty=y+h/2-totalH/2+lh+vpad;
-      lines.forEach((l,i)=>doc.text(l,align==='center'?x+w/2:align==='left'?x+2:x+w-1.5,ty+i*lh,{align}));
+    // Helper: draw cell
+    function cell(x,y,w,h,txt,opts){
+      const {bold=false,sz=9,col=[30,30,50],bg=null,al='center'}=opts||{};
+      doc.setDrawColor(60,80,160);doc.setLineWidth(0.35);
+      if(bg){doc.setFillColor(bg[0],bg[1],bg[2]);doc.rect(x,y,w,h,'FD');}
+      else doc.rect(x,y,w,h,'D');
+      if(txt===null||txt===undefined||txt==='')return;
+      doc.setFont('helvetica',bold?'bold':'normal');
+      doc.setFontSize(sz);doc.setTextColor(col[0],col[1],col[2]);
+      const lines=doc.splitTextToSize(String(txt),w-2);
+      const lh=sz*0.38,total=lines.length*lh;
+      const ty=y+h/2-total/2+lh;
+      const tx=al==='center'?x+w/2:al==='left'?x+1.5:x+w-1.5;
+      lines.forEach((l,i)=>doc.text(l,tx,ty+i*lh,{align:al}));
     }
 
-    // ── OUTER BORDER ──
-    doc.setDrawColor(50,80,130);doc.setLineWidth(1);doc.rect(ML,MT,CW,PH-MT*2);
+    // Outer border
+    doc.setDrawColor(60,80,160);doc.setLineWidth(1);doc.rect(ML,MT,CW,PH-MT*2);
 
     // ── HEADER ──
     doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(10,10,40);
     doc.text('VENSAR CONSTRUCTIONS COMPANY LIMITED.',PW/2,MT+11,{align:'center'});
-    doc.setFontSize(11);
-    doc.text('NF RAILWAY TUNNEL WORKS - MANIPUR UNIT',PW/2,MT+18,{align:'center'});
-    doc.text(`TUNNEL NO  ${site}, IMPHAL`,PW/2,MT+24,{align:'center'});
+    doc.setFontSize(11);doc.text('NF RAILWAY TUNNEL WORKS - MANIPUR UNIT',PW/2,MT+18,{align:'center'});
+    doc.text('TUNNEL NO  '+site+', IMPHAL',PW/2,MT+24,{align:'center'});
 
-    // VENSAR colored logo
-    const vx=PW-ML-28, vy=MT+5;
-    doc.setFont('helvetica','bold');doc.setFontSize(20);
-    doc.setTextColor(30,100,200);doc.text('VEN',vx,vy+10);
-    doc.setTextColor(220,80,30);doc.text('S',vx+17,vy+10);
-    doc.setTextColor(30,140,60);doc.text('AR',vx+23,vy+10);
-    // Triangle logo mark
-    doc.setFillColor(220,80,30);doc.triangle(vx+10,vy+2,vx+15,vy+8,vx+5,vy+8,'F');
+    // VENSAR logo (text-based)
+    doc.setFont('helvetica','bold');doc.setFontSize(22);
+    const vx=PW-ML-36,vy=MT+18;
+    doc.setTextColor(30,100,200);doc.text('VEN',vx,vy);
+    doc.setTextColor(220,80,20);doc.text('S',vx+21,vy);
+    doc.setTextColor(20,140,60);doc.text('AR',vx+27,vy);
+    doc.setFontSize(9);doc.setTextColor(80,80,120);doc.text('CONSTRUCTIONS',vx-2,vy+6);
 
-    // Report title in red
+    // Report title
     doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(200,30,30);
     doc.text('DAILY PROGRESS REPORT OF CRUSHER PLANT',PW/2,MT+32,{align:'center'});
 
-    // Date box
+    // Date
     doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(20,20,40);
-    doc.text('Date :',PW-ML-46,MT+37);
-    doc.setFillColor(255,255,0);doc.rect(PW-ML-33,MT+30,33,9,'F');
-    doc.setDrawColor(100,100,100);doc.setLineWidth(0.3);doc.rect(PW-ML-33,MT+30,33,9,'D');
-    doc.setTextColor(20,20,20);doc.setFontSize(12);
-    doc.text(rptDate.split('-').reverse().join('-'),PW-ML-16,MT+37,{align:'center'});
-
-    // Prepared by
+    doc.text('Date :',PW-ML-50,MT+38);
+    doc.setFillColor(255,255,0);doc.rect(PW-ML-35,MT+30,35,10,'F');
+    doc.setDrawColor(100,100,100);doc.setLineWidth(0.3);doc.rect(PW-ML-35,MT+30,35,10,'D');
+    doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(20,20,20);
+    doc.text(rptDate.split('-').reverse().join('-'),PW-ML-17.5,MT+37,{align:'center'});
     doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(80,80,100);
-    doc.text(`Prepared by: ${prepBy}`,ML+2,MT+37);
+    doc.text('Prepared by: '+String(prepBy||'—'),ML+2,MT+38);
 
-    // Separator line
-    doc.setDrawColor(50,80,130);doc.setLineWidth(0.5);doc.line(ML,MT+40,PW-ML,MT+40);
+    doc.setDrawColor(60,80,160);doc.setLineWidth(0.5);doc.line(ML,MT+41,PW-ML,MT+41);
 
-    let Y=MT+40;
-    const BLUE=[20,60,160],LBLUE=[210,225,255],WHITE=[255,255,255];
-    const RH=7.5; // data row height
-    const HH=12; // header row height
+    let Y=MT+41;
+    const BG=[20,60,160],LBLUE=[210,225,255];
 
-    // ── ROW 1: "MATERIAL SHIFTED TO" spanning cols 4-9 ──
-    const shStart=CX[4],shW=CWS.slice(4,9).reduce((a,b)=>a+b,0);
-    cell(CX[0],Y,CWS[0]+CWS[1]+CWS[2]+CWS[3],HH-2,'',{bg:LBLUE});// left span blank
-    cell(shStart,Y,shW,HH-2,'MATERIAL SHIFTED TO',{bold:true,size:10,color:WHITE,bg:BLUE});
-    cell(CX[9],Y,CWS[9],HH-2,'',{bg:LBLUE});
-    Y+=HH-2;
+    // ── ROW 1: MATERIAL SHIFTED TO header ──
+    const shX=CX[4],shW=CWS.slice(4,9).reduce((a,b)=>a+b,0);
+    cell(CX[0],Y,CWS[0]+CWS[1]+CWS[2]+CWS[3],9,'',{bg:LBLUE});
+    cell(shX,Y,shW,9,'MATERIAL SHIFTED TO',{bold:true,sz:10,col:[255,255,255],bg:BG});
+    cell(CX[9],Y,CWS[9],9,'',{bg:LBLUE});
+    Y+=9;
 
     // ── ROW 2: Column headers ──
-    const hdrs=[
-      ['SL\nNO','MATERIAL\nDESCRIPTION',`TOTAL PRODUCTION\n(Tons)\n(${periodFrom.split('-').reverse().join('-')} to ${rptDate.split('-').reverse().join('-')})`,`TODAY PRODUCTION\n(Tons)\n(${rptDate.split('-').reverse().join('-')})`,
-      'P1','ADIT-1','MAIN P2','T28\nTUPUL','TOTAL SHIFTED\n(Tons)','TOTAL STOCK\nBALANCE\n(Tons)']
-    ];
-    CWS.forEach((w,i)=>cell(CX[i],Y,w,HH,hdrs[0][i],{bold:true,size:8,color:WHITE,bg:BLUE}));
-    Y+=HH;
+    const HDR=['SL\nNO','MATERIAL\nDESCRIPTION','TOTAL PRODUCTION\n(Tons)\n('+periodFrom.split('-').reverse().join('-')+' to '+rptDate.split('-').reverse().join('-')+')',`TODAY PRODUCTION\n(Tons)\n(${rptDate.split('-').reverse().join('-')})`,'P1','ADIT-1','MAIN\nP2','T28\nTUPUL','TOTAL\nSHIFTED\n(Tons)','TOTAL STOCK\nBALANCE\n(Tons)'];
+    const HH=14;CWS.forEach((w,i)=>cell(CX[i],Y,w,HH,HDR[i],{bold:true,sz:8,col:[255,255,255],bg:BG}));Y+=HH;
 
-    // ── MATERIAL ROWS ──
-    const mats=[
-      {sl:'1',name:'SAND',cum:cumTot.sand,today:rec.production.sand,sh:rec.shifted?.['Sand']||{},bal:sb.sand},
-      {sl:'2',name:'10 MM',cum:cumTot['10mm'],today:rec.production['10mm'],sh:rec.shifted?.['10mm']||{},bal:sb['10mm']},
-      {sl:'3',name:'20 MM',cum:cumTot['20mm'],today:rec.production['20mm'],sh:rec.shifted?.['20mm']||{},bal:sb['20mm']},
-      {sl:'4',name:'80 MM',cum:cumTot['80mm'],today:rec.production['80mm'],sh:rec.shifted?.['80mm']||{},bal:sb['80mm']},
+    // ── DATA ROWS ──
+    const MATS=[
+      {sl:'1',name:'SAND',cum:cumTot.sand,today:rec.production.sand,sh:rec.shifted?.['Sand']||{},bal:sb2.sand},
+      {sl:'2',name:'10 MM',cum:cumTot['10mm'],today:rec.production['10mm'],sh:rec.shifted?.['10mm']||{},bal:sb2['10mm']},
+      {sl:'3',name:'20 MM',cum:cumTot['20mm'],today:rec.production['20mm'],sh:rec.shifted?.['20mm']||{},bal:sb2['20mm']},
+      {sl:'4',name:'80 MM',cum:cumTot['80mm'],today:rec.production['80mm'],sh:rec.shifted?.['80mm']||{},bal:sb2['80mm']},
     ];
-    mats.forEach((m,ri)=>{
-      const bg=ri%2===0?[245,248,255]:[255,255,255];
-      const shTot=(m.sh.p1||0)+(m.sh.adit||0)+(m.sh.p2||0)+(m.sh.tupul||0);
-      const rowData=[m.sl,m.name,m.cum.toFixed(0),m.today.toFixed(0),(m.sh.p1||0).toFixed(0),(m.sh.adit||0).toFixed(0),(m.sh.p2||0).toFixed(0),(m.sh.tupul||0).toFixed(0),shTot.toFixed(0),m.bal.toLocaleString()];
-      rowData.forEach((v,i)=>cell(CX[i],Y,CWS[i],RH,v,{bold:i===1||i===3||i===8||i===9,size:i===1?10:9.5,color:i===1?[10,10,40]:[30,30,50],bg,align:i<=1?'center':'center'}));
+    const RH=9;
+    MATS.forEach((m,ri)=>{
+      const bg2=ri%2===0?[242,248,255]:[255,255,255];
+      const st=(m.sh.p1||0)+(m.sh.adit||0)+(m.sh.p2||0)+(m.sh.tupul||0);
+      const vals=[m.sl,m.name,Math.round(m.cum),Math.round(m.today),Math.round(m.sh.p1||0),Math.round(m.sh.adit||0),Math.round(m.sh.p2||0),Math.round(m.sh.tupul||0),Math.round(st),Math.round(m.bal).toLocaleString()];
+      vals.forEach((v,i)=>cell(CX[i],Y,CWS[i],RH,v,{bold:i===1||i===3||i===8||i===9,sz:i===1?10:9.5,col:i===1?[10,10,40]:[30,30,60],bg:bg2}));
       Y+=RH;
     });
 
-    // ── BOULDER SEPARATOR ──
-    doc.setDrawColor(50,80,130);doc.setLineWidth(0.3);doc.line(ML,Y,PW-ML,Y);Y+=1;
+    // ── BOULDER SECTION ──
+    doc.setDrawColor(60,80,160);doc.setLineWidth(0.3);doc.line(ML,Y,PW-ML,Y);Y+=1;
 
-    // ── BOULDER HEADER ROW ──
-    cell(CX[0],Y,CWS[0],HH*1.5,'',{bg:LBLUE});
-    cell(CX[1],Y,CWS[1],HH*1.5,'',{bg:LBLUE});
-    cell(CX[2],Y,CWS[2],HH*1.5,`BOULDER COLLECTED\n(${periodFrom.split('-').reverse().join('-')} to ${rptDate.split('-').reverse().join('-')})`,{bold:true,size:8.5,color:[10,10,100],bg:LBLUE});
-    cell(CX[3],Y,CWS[3],HH*1.5,`TODAY CRUSHED\n( Tons )\n(${rptDate.split('-').reverse().join('-')})`,{bold:true,size:8.5,color:[10,10,100],bg:LBLUE});
-    for(let i=4;i<10;i++)cell(CX[i],Y,CWS[i],HH*1.5,'',{bg:LBLUE});
-    Y+=HH*1.5;
+    // Boulder subheader
+    cell(CX[0],Y,CWS[0],14,'',{bg:LBLUE});
+    cell(CX[1],Y,CWS[1],14,'',{bg:LBLUE});
+    cell(CX[2],Y,CWS[2],14,'BOULDER COLLECTED\n('+periodFrom.split('-').reverse().join('-')+' to '+rptDate.split('-').reverse().join('-')+')',{bold:true,sz:8,col:[10,10,100],bg:LBLUE});
+    cell(CX[3],Y,CWS[3],14,'TODAY CRUSHED\n( Tons )\n('+rptDate.split('-').reverse().join('-')+')',{bold:true,sz:8,col:[10,10,100],bg:LBLUE});
+    for(let i=4;i<10;i++)cell(CX[i],Y,CWS[i],14,'',{bg:LBLUE});
+    Y+=14;
 
-    // ── BOULDER DATA ROW ──
-    const bshTot=(rec.shifted?.['Boulder']?.p1||0)+(rec.shifted?.['Boulder']?.adit||0)+(rec.shifted?.['Boulder']?.p2||0)+(rec.shifted?.['Boulder']?.tupul||0);
-    const bldRowData=['1','BOULDER',cumBoulder.toFixed(0),rec.boulders.feedingMT.toFixed(0),(rec.shifted?.['Boulder']?.p1||0).toFixed(0),(rec.shifted?.['Boulder']?.adit||0).toFixed(0),(rec.shifted?.['Boulder']?.p2||0).toFixed(0),(rec.shifted?.['Boulder']?.tupul||0).toFixed(0),bshTot.toFixed(0),sb.boulder.toLocaleString()];
-    bldRowData.forEach((v,i)=>cell(CX[i],Y,CWS[i],RH,v,{bold:i===1||i===3||i===8||i===9,size:i===1?10:9.5,color:i===1?[10,10,40]:[30,30,50],bg:[255,255,255]}));
-    Y+=RH+1;
+    // Boulder data row
+    const bsh=(rec.shifted?.['Boulder']?.adit||0);
+    const bst=(rec.shifted?.['Boulder']?.p1||0)+(rec.shifted?.['Boulder']?.adit||0)+(rec.shifted?.['Boulder']?.p2||0)+(rec.shifted?.['Boulder']?.tupul||0);
+    const bVals=['1','BOULDER',Math.round(cumBoulder),Math.round(rec.boulders.feedingMT),Math.round(rec.shifted?.['Boulder']?.p1||0),Math.round(bsh),Math.round(rec.shifted?.['Boulder']?.p2||0),Math.round(rec.shifted?.['Boulder']?.tupul||0),Math.round(bst),Math.round(sb2.boulder).toLocaleString()];
+    bVals.forEach((v,i)=>cell(CX[i],Y,CWS[i],RH,v,{bold:i===1||i===3||i===8||i===9,sz:i===1?10:9.5,col:i===1?[10,10,40]:[30,30,60],bg:[255,255,255]}));Y+=RH+2;
 
     // ── NOTE & REMARKS ──
-    doc.setDrawColor(50,80,130);doc.setLineWidth(0.4);doc.line(ML,Y,PW-ML,Y);Y+=2;
-    // Note left
-    doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(0,0,0);doc.text('Note :',ML+2,Y+5);
+    doc.setDrawColor(60,80,160);doc.setLineWidth(0.4);doc.line(ML,Y,PW-ML,Y);Y+=2.5;
+    doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(0);doc.text('Note :',ML+2,Y+5);
     doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(200,20,20);doc.text('ALL VALUES ARE IN " METRIC TONS " ONLY',ML+14,Y+5);
-    // Remarks right
-    const remW=120;const remX=PW-ML-remW;
-    doc.setFillColor(210,220,245);doc.rect(remX-22,Y,22,10,'F');doc.setDrawColor(50,80,130);doc.setLineWidth(0.3);doc.rect(remX-22,Y,22,10,'D');
-    doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(20,20,80);doc.text('Remarks :',remX-21,Y+6.5);
-    doc.rect(remX,Y,remW,10,'D');
+    const remX=PW-ML-120;
+    doc.setFillColor(210,220,245);doc.rect(remX-24,Y,24,11,'F');doc.setDrawColor(60,80,160);doc.setLineWidth(0.3);doc.rect(remX-24,Y,24,11,'D');
+    doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(20,20,80);doc.text('Remarks :',remX-22,Y+7);
+    doc.rect(remX,Y,120,11,'D');
     doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(30,30,50);
-    const rmkLines=doc.splitTextToSize(rec.remarks||'No remarks.',remW-2);doc.text(rmkLines,remX+1,Y+5);
+    const rmkL=doc.splitTextToSize(String(rec.remarks||'—'),118);doc.text(rmkL,remX+1,Y+5);
+    Y+=14;
 
-    // ── SIGN BOXES ──
-    Y+=12;
-    const signW=(CW)/3;const signH=16;const signY=Y;
-    ['Prepared By','Checked By','Approved By'].forEach((l,i)=>{
-      const sx=ML+signW*i;
-      doc.setFillColor(240,244,255);doc.rect(sx,signY,signW-2,signH,'F');doc.setDrawColor(50,80,130);doc.setLineWidth(0.3);doc.rect(sx,signY,signW-2,signH,'D');
-      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(50,80,130);doc.text(l,sx+signW/2-1,signY+signH-4,{align:'center'});
-      if(i===0&&prepBy){doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(30,30,50);doc.text(prepBy,sx+signW/2-1,signY+6,{align:'center'});}
+    // ── SIGNATURE BOXES ──
+    const sigW=(CW-4)/3;['Prepared By','Checked By','Approved By'].forEach((l,i)=>{
+      const sx=ML+sigW*i+i*2;
+      doc.setFillColor(240,245,255);doc.rect(sx,Y,sigW,16,'F');doc.setDrawColor(60,80,160);doc.setLineWidth(0.3);doc.rect(sx,Y,sigW,16,'D');
+      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(50,80,130);doc.text(l,sx+sigW/2,Y+14,{align:'center'});
+      if(i===0){doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(30,30,50);doc.text(String(prepBy||'—'),sx+sigW/2,Y+7,{align:'center'});}
     });
 
     // ── FOOTER ──
@@ -1248,138 +1247,167 @@ function buildOfficialPDF(rec,periodFrom,rptDate,cumTot,cumBoulder,sb,site,prepB
     doc.text('CrusherOS · Vensar Constructions Pvt Ltd · CONFIDENTIAL',ML+2,PH-MT-1);
     doc.text('Generated: '+new Date().toLocaleString('en-IN'),PW-ML,PH-MT-1,{align:'right'});
 
-    doc.save(`OfficialReport_${rptDate}_${site}.pdf`);
-    toast('✅ Official PDF generated!','ok');
-  }catch(e){console.error('Official PDF error:',e);toast('PDF error: '+e.message,'err');}
+    doc.save('OfficialReport_'+rptDate+'_'+site+'.pdf');
+    toast('✅ Official PDF generated!','tok');
+  }catch(e){
+    console.error('Official PDF error:',e);
+    toast('PDF Error: '+e.message,'ter');
+  }
 }
 
-/* ══════════════ SINGLE RECORD PDF ══════════════ */
+/* ══════════════════════════════════════════════════
+   SINGLE RECORD PDF
+══════════════════════════════════════════════════ */
 function expSingle(id){
   try{
-    if(!window.jspdf){toast('PDF library not loaded. Please refresh.','err');return;}
-    const r=reports.find(x=>x.id===id);if(!r)return;
-    const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const r=reports.find(x=>x.id===id);if(!r){toast('Report not found.','ter');return;}
+    if(!window.jspdf){toast('PDF library not loaded.','ter');return;}
+    const jsPDFClass=window.jspdf.jsPDF||window.jspdf;
+    const doc=new jsPDFClass('p','mm','a4');
     const W=210,M=14;
 
-    function addHdr(){
-      doc.setFillColor(8,13,24);doc.rect(0,0,W,30,'F');
-      doc.setFillColor(245,166,35);doc.rect(0,0,5,30,'F');
-      doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(245,166,35);
-      doc.text('CRUSHER PLANT DAILY REPORT',M+4,12);
-      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,160,180);
-      doc.text('Vensar Constructions Pvt Ltd · NF Railway Tunnel, Manipur',M+4,19);
-      doc.text('ID:'+r.id+' · Generated:'+new Date().toLocaleDateString('en-IN'),W-M,19,{align:'right'});
-    }
-    function addFtr(){const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFillColor(245,166,35);doc.rect(0,285,5,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text(`Pg ${i}/${pg}`,W-M,293,{align:'right'});}}
-    function sec(title,y){if(y>264){doc.addPage();addHdr();y=34;}doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(245,166,35);doc.text(title.toUpperCase(),M+5,y+.5);doc.setTextColor(30,30,40);return y+11;}
-    function kv(k,v,x1,x2,y){if(y>272){doc.addPage();addHdr();y=34;}doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(100,100,130);doc.text(k+':',x1,y);doc.setFont('helvetica','normal');doc.setTextColor(30,30,45);const ls=doc.splitTextToSize(String(v||'—'),x2-x1);ls.forEach((l,i)=>doc.text(l,x2,y+i*5));return y+Math.max(1,ls.length)*5+2;}
-    function tblRow(cells,widths,y,bg=null,bold=false){if(y>272){doc.addPage();addHdr();y=34;}if(bg){doc.setFillColor(...bg);doc.rect(M,y-4,W-M*2,7,'F');}let x=M;cells.forEach((v,i)=>{doc.setFont('helvetica',bold?'bold':'normal');doc.setFontSize(bold&&i===0?9:9.5);doc.setTextColor(bold&&i===0?[180,110,0]:[40,40,55]);doc.text(String(v),x+widths[i]/2,y+1,{align:'center'});x+=widths[i];});return y+7;}
+    function hdr(){doc.setFillColor(8,13,24);doc.rect(0,0,W,30,'F');doc.setFillColor(245,166,35);doc.rect(0,0,5,30,'F');doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(245,166,35);doc.text('CRUSHER PLANT DAILY REPORT',M+4,12);doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,160,180);doc.text('Vensar Constructions Pvt Ltd · NF Railway Tunnel, Manipur',M+4,19);doc.text('Report ID: '+r.id,W-M,19,{align:'right'});}
+    function ftr(){const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}}
+    function sec(t,y){if(y>264){doc.addPage();hdr();y=34;}doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(245,166,35);doc.text(t.toUpperCase(),M+5,y+0.5);return y+11;}
+    function kv(k,v,x1,x2,y){if(y>272){doc.addPage();hdr();y=34;}doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(100,100,130);doc.text(String(k)+':',x1,y);doc.setFont('helvetica','normal');doc.setTextColor(30,30,45);const ls=doc.splitTextToSize(String(v||'—'),x2-x1);ls.forEach((l,i)=>doc.text(l,x2,y+i*5));return y+Math.max(1,ls.length)*5+2;}
+    function trow(cells,widths,y,bg,bold){if(y>272){doc.addPage();hdr();y=34;}if(bg){doc.setFillColor(bg[0],bg[1],bg[2]);doc.rect(M,y-4,W-M*2,7,'F');}let x=M;cells.forEach((v,i)=>{doc.setFont('helvetica',bold?'bold':'normal');doc.setFontSize(9.5);doc.setTextColor(bold&&i===0?[180,110,0]:[40,40,55]);doc.text(String(v||'0'),x+widths[i]/2,y+1,{align:'center'});x+=widths[i];});return y+7;}
 
-    addHdr();let y=36;
+    hdr();let y=36;
     // Site info
     y=sec('Site Information',y);
-    const h=y;let ll=kv('Date',fd(r.date),M,M+36,h);ll=kv('Site',r.site,M,M+36,ll);ll=kv('Shift',r.shift,M,M+36,ll);ll=kv('Prepared By',r.preparedBy||'—',M,M+36,ll);
-    let rr=kv('Plant Status',SLBL[r.plantStatus]||'—',110,145,h);rr=kv('Created By',r.createdBy||'—',110,145,rr);rr=kv('Created At',fdt(r.createdAt||''),110,145,rr);
-    y=Math.max(ll,rr)+4;
+    let ll=kv('Date',fd(r.date),M,M+36,y),rr=kv('Status',SLBL[r.plantStatus]||'—',110,145,y);
+    ll=kv('Site',r.site,M,M+36,ll);rr=kv('Created By',r.createdBy||'—',110,145,rr);
+    ll=kv('Shift',r.shift,M,M+36,ll);rr=kv('Created At',fdt(r.createdAt||''),110,145,rr);
+    ll=kv('Prepared By',r.preparedBy||'—',M,M+36,ll);y=Math.max(ll,rr)+4;
+
     // Production table
     y=sec("Today's Production (MT)",y);
     const pW=[(W-M*2)/5,(W-M*2)/5,(W-M*2)/5,(W-M*2)/5,(W-M*2)/5];
-    y=tblRow(['Material','Sand','10mm','20mm','80mm'],pW,y,[235,240,255],true);
-    y=tblRow(['Today Production',r.production.sand.toFixed(2),r.production['10mm'].toFixed(2),r.production['20mm'].toFixed(2),r.production['80mm'].toFixed(2)],pW,y,[248,250,255]);
-    y=tblRow([`TOTAL: ${r.production.total.toFixed(2)} MT`,'— ','— ','— ','— '],pW,y,[235,240,255],true);
-    if(r.production.total>0){doc.setFont('helvetica','italic');doc.setFontSize(8.5);doc.setTextColor(100,100,120);doc.text(`Sand ${(r.production.sand/r.production.total*100).toFixed(1)}% · 10mm ${(r.production['10mm']/r.production.total*100).toFixed(1)}% · 20mm ${(r.production['20mm']/r.production.total*100).toFixed(1)}% · 80mm ${(r.production['80mm']/r.production.total*100).toFixed(1)}%`,M,y+2);y+=10;}
+    y=trow(['Material','Sand','10mm','20mm','80mm'],pW,y,[235,240,255],true);
+    y=trow(['Today',r.production.sand.toFixed(2),r.production['10mm'].toFixed(2),r.production['20mm'].toFixed(2),r.production['80mm'].toFixed(2)],pW,y,[248,250,255],false);
+    y=trow(['TOTAL: '+r.production.total.toFixed(2)+' MT','','','',''],pW,y,[235,240,255],true);
+    if(r.production.total>0){doc.setFont('helvetica','italic');doc.setFontSize(8.5);doc.setTextColor(100,100,120);doc.text('Sand '+((r.production.sand/r.production.total*100).toFixed(1))+'%  ·  10mm '+((r.production['10mm']/r.production.total*100).toFixed(1))+'%  ·  20mm '+((r.production['20mm']/r.production.total*100).toFixed(1))+'%  ·  80mm '+((r.production['80mm']/r.production.total*100).toFixed(1))+'%',M,y+2);y+=10;}
+
     // Plant Hours
-    y=sec('Plant Run Hours',y);const phW=[(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6];
-    y=tblRow(['Plant','Day Hrs','Night Hrs','Breakdown','Total Run','Utilisation %'],phW,y,[235,240,255],true);
+    y=sec('Plant Run Hours',y);
+    const phW=[(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6];
+    y=trow(['Plant','Day Hrs','Night Hrs','Breakdown','Total Run','Utilisation'],phW,y,[235,240,255],true);
     const t120=r.plant120.day+r.plant120.night,t150=r.plant150.day+r.plant150.night;
-    y=tblRow(['120 TPH — NAVA',r.plant120.day.toFixed(2),r.plant120.night.toFixed(2),r.plant120.breakdown.toFixed(2),t120.toFixed(2),(t120/12*100).toFixed(0)+'%'],phW,y,[248,250,255]);
-    y=tblRow(['150 TPH — NAVA',r.plant150.day.toFixed(2),r.plant150.night.toFixed(2),r.plant150.breakdown.toFixed(2),t150.toFixed(2),(t150/12*100).toFixed(0)+'%'],phW,y);
-    y=tblRow(['COMBINED','—','—',(r.plant120.breakdown+r.plant150.breakdown).toFixed(2),(t120+t150).toFixed(2),'—'],phW,y,[235,240,255],true);y+=4;
-    // Boulders
-    y=sec('Boulders & Fuel',y);const bW=[(W-M*2)/4,(W-M*2)/4,(W-M*2)/4,(W-M*2)/4];
-    y=tblRow(['Metric','Collection','Feeding / Crushed','HSD'],bW,y,[235,240,255],true);
-    y=tblRow(['Trips',r.boulders.collectedTrips,r.boulders.feedingTrips,'—'],bW,y,[248,250,255]);
-    y=tblRow(['Quantity (MT)',r.boulders.collectedMT.toFixed(2),r.boulders.feedingMT.toFixed(2),r.hsd.toLocaleString()+' L'],bW,y);y+=4;
-    // Shifted
-    if(r.shifted){y=sec('Material Shifted (MT)',y);const msW=[(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6];y=tblRow(['Material','P1','ADIT-1','Main P2','T28 Tupul','Total'],msW,y,[235,240,255],true);MAT.forEach((row,ri)=>{const d=r.shifted[row]||{};y=tblRow([row,(d.p1||0).toFixed(2),(d.adit||0).toFixed(2),(d.p2||0).toFixed(2),(d.tupul||0).toFixed(2),(d.total||0).toFixed(2)],msW,y,ri%2===0?[248,250,255]:null);});y+=4;}
+    y=trow(['120 TPH',r.plant120.day.toFixed(2),r.plant120.night.toFixed(2),r.plant120.breakdown.toFixed(2),t120.toFixed(2),(t120/12*100).toFixed(0)+'%'],phW,y,[248,250,255],false);
+    y=trow(['150 TPH',r.plant150.day.toFixed(2),r.plant150.night.toFixed(2),r.plant150.breakdown.toFixed(2),t150.toFixed(2),(t150/12*100).toFixed(0)+'%'],phW,y,null,false);
+    y=trow(['COMBINED','—','—',(r.plant120.breakdown+r.plant150.breakdown).toFixed(2),(t120+t150).toFixed(2),'—'],phW,y,[235,240,255],true);y+=4;
+
+    // Boulders & Fuel
+    y=sec('Boulders & Fuel',y);
+    const bW=[(W-M*2)/4,(W-M*2)/4,(W-M*2)/4,(W-M*2)/4];
+    y=trow(['Metric','Collection','Feeding/Crushed','HSD'],bW,y,[235,240,255],true);
+    y=trow(['Trips',r.boulders.collectedTrips,r.boulders.feedingTrips,'—'],bW,y,[248,250,255],false);
+    y=trow(['Quantity (MT)',r.boulders.collectedMT.toFixed(2),r.boulders.feedingMT.toFixed(2),r.hsd.toLocaleString()+' L'],bW,y,null,false);y+=4;
+
+    // Material Shifted
+    if(r.shifted){
+      y=sec('Material Shifted Today (MT)',y);
+      const msW=[(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6,(W-M*2)/6];
+      y=trow(['Material','P1 TT12','ADIT-1','Main P2','T28 Tupul','Total'],msW,y,[235,240,255],true);
+      MAT.forEach((row,ri)=>{const d=r.shifted[row]||{};y=trow([row,(d.p1||0).toFixed(2),(d.adit||0).toFixed(2),(d.p2||0).toFixed(2),(d.tupul||0).toFixed(2),(d.total||0).toFixed(2)],msW,y,ri%2===0?[248,250,255]:null,false);});y+=4;
+    }
+
     // Stock Balance
-    if(r.stockBalance){y=sec('Stock Balance (MT)',y);const sbW=[(W-M*2)/5,(W-M*2)/5,(W-M*2)/5,(W-M*2)/5,(W-M*2)/5];y=tblRow(['Sand','10mm','20mm','80mm','Boulder'],sbW,y,[235,240,255],true);y=tblRow([r.stockBalance.sand.toFixed(2),r.stockBalance['10mm'].toFixed(2),r.stockBalance['20mm'].toFixed(2),r.stockBalance['80mm'].toFixed(2),(r.stockBalance.boulder||0).toFixed(2)],sbW,y,[248,250,255]);y+=4;}
+    if(r.stockBalance){
+      y=sec('Stock Balance (MT) — Yard Inventory',y);
+      const sbW=[(W-M*2)/5,(W-M*2)/5,(W-M*2)/5,(W-M*2)/5,(W-M*2)/5];
+      y=trow(['Sand','10mm','20mm','80mm','Boulder'],sbW,y,[235,240,255],true);
+      y=trow([r.stockBalance.sand.toFixed(2),r.stockBalance['10mm'].toFixed(2),r.stockBalance['20mm'].toFixed(2),r.stockBalance['80mm'].toFixed(2),(r.stockBalance.boulder||0).toFixed(2)],sbW,y,[248,250,255],false);y+=4;
+    }
+
     // Remarks
-    y=sec('Remarks',y);doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(50,50,70);const rmkL=doc.splitTextToSize(r.remarks||'No remarks.',W-M*2-4);rmkL.forEach(l=>{if(y>272){doc.addPage();addHdr();y=34;}doc.text(l,M+2,y);y+=6;});
+    y=sec('Remarks',y);doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(50,50,70);
+    doc.splitTextToSize(String(rec&&rec.remarks?rec.remarks:'No remarks.'),W-M*2-4).forEach(l=>{if(y>272){doc.addPage();hdr();y=34;}doc.text(l,M+2,y);y+=6;});
+
     // Changelog
-    if(r.changelog?.length){y=sec(`Change Log (${r.changelog.length})`,y);r.changelog.forEach(c=>{if(y>262){doc.addPage();addHdr();y=34;}doc.setFillColor(235,242,255);doc.rect(M,y-4,W-M*2,8+(c.changes.length*5)+2,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(74,100,220);doc.text(fdt(c.ts)+' · '+c.by,M+3,y);doc.setFont('helvetica','italic');doc.setFontSize(8.5);doc.setTextColor(100,100,120);doc.text('"'+c.reason+'"',W-M,y,{align:'right'});y+=6;c.changes.forEach(ch=>{if(y>272){doc.addPage();addHdr();y=34;}doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(60,60,80);doc.text(ch.label+':',M+4,y);doc.setTextColor(200,50,50);doc.text(String(ch.from),M+42,y);doc.setTextColor(80,80,100);doc.text('→',M+62,y);doc.setTextColor(20,150,80);doc.text(String(ch.to),M+68,y);y+=5;});y+=4;});}
-    addFtr();
-    doc.save(`DailyReport_${r.date}_${r.site}.pdf`);
-    toast('📄 PDF ready!','ok');
-  }catch(e){console.error('PDF error:',e);toast('PDF error: '+e.message,'err');}
+    if(r.changelog?.length){
+      y=sec('Change Log ('+r.changelog.length+')',y);
+      r.changelog.forEach(c=>{
+        if(y>262){doc.addPage();hdr();y=34;}
+        doc.setFillColor(235,242,255);doc.rect(M,y-4,W-M*2,8+(c.changes.length*5)+2,'F');
+        doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(74,100,220);doc.text(fdt(c.ts)+' · '+String(c.by||''),M+3,y);
+        doc.setFont('helvetica','italic');doc.setFontSize(8.5);doc.setTextColor(100,100,120);doc.text('"'+String(c.reason||'')+'"',W-M,y,{align:'right'});y+=6;
+        c.changes.forEach(ch=>{if(y>272){doc.addPage();hdr();y=34;}doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(60,60,80);doc.text(String(ch.label||'')+':',M+4,y);doc.setTextColor(200,50,50);doc.text(String(ch.from||''),M+42,y);doc.setTextColor(80);doc.text('→',M+62,y);doc.setTextColor(20,150,80);doc.text(String(ch.to||''),M+68,y);y+=5;});y+=4;
+      });
+    }
+    ftr();
+    doc.save('DailyReport_'+r.date+'_'+r.site+'.pdf');
+    toast('📄 PDF ready!','tok');
+  }catch(e){
+    console.error('Single PDF error:',e);
+    toast('PDF Error: '+e.message,'ter');
+  }
 }
 
-/* ══════════════ DASHBOARD PDF ══════════════ */
+/* ══════════════════════════════════════════════════
+   DASHBOARD PDF
+══════════════════════════════════════════════════ */
 function expDashPDF(){
   try{
-    if(!window.jspdf){toast('PDF library not loaded. Please refresh.','err');return;}
-    const {jsPDF}=window.jspdf;const doc=new jsPDF();const W=210,M=14;
+    if(!window.jspdf){toast('PDF library not loaded.','ter');return;}
+    const jsPDFClass=window.jspdf.jsPDF||window.jspdf;
+    const doc=new jsPDFClass('p','mm','a4');const W=210,M=14;
     doc.setFillColor(8,13,24);doc.rect(0,0,W,30,'F');doc.setFillColor(245,166,35);doc.rect(0,0,5,30,'F');
     doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(245,166,35);doc.text('OPERATIONS DASHBOARD',M+4,12);
-    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,160,180);doc.text('Vensar Constructions · NF Railway · '+new Date().toLocaleDateString('en-IN')+' · '+reports.length+' reports',M+4,19);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,160,180);doc.text('Vensar Constructions · '+new Date().toLocaleDateString('en-IN')+' · '+reports.length+' reports',M+4,19);
     let y=36;
-    const tot=reports.reduce((s,r)=>s+r.production.total,0);const hsdT=reports.reduce((s,r)=>s+r.hsd,0);const bldT=reports.reduce((s,r)=>s+r.boulders.feedingMT,0);const avg=reports.length?tot/reports.length:0;
+    const tot=reports.reduce((s,r)=>s+r.production.total,0),hsdT=reports.reduce((s,r)=>s+r.hsd,0),bldT=reports.reduce((s,r)=>s+r.boulders.feedingMT,0),avg=reports.length?tot/reports.length:0;
     const sand=reports.reduce((s,r)=>s+r.production.sand,0),mm10=reports.reduce((s,r)=>s+r.production['10mm'],0),mm20=reports.reduce((s,r)=>s+r.production['20mm'],0),mm80=reports.reduce((s,r)=>s+r.production['80mm'],0);
-    doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(245,166,35);doc.text('KEY PERFORMANCE INDICATORS',M+5,y+.5);y+=12;
-    const kpis=[['Total Production',Math.round(tot).toLocaleString()+' MT'],['Average Daily',Math.round(avg)+' MT/day'],['Total HSD',hsdT.toLocaleString()+' L'],['Boulders Fed',Math.round(bldT).toLocaleString()+' MT'],['Fuel Efficiency',tot>0?(hsdT/tot).toFixed(2)+' L/MT':'—'],['Conversion',bldT>0?((tot/bldT)*100).toFixed(1)+'%':'—'],['Days Recorded',reports.length],['Sand',Math.round(sand)+' MT ('+( tot>0?(sand/tot*100).toFixed(1):0)+'%)'],['10mm',Math.round(mm10)+' MT'],['20mm',Math.round(mm20)+' MT'],['80mm',Math.round(mm80)+' MT'],['Breakdown Days',reports.filter(r=>r.plantStatus==='breakdown').length]];
-    const kw=(W-M*2)/2;kpis.forEach(([k,v],i)=>{if(y>272){doc.addPage();y=20;}const x=i%2===0?M:M+kw;if(i%2===0&&i>0)y+=7;doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(100,100,130);doc.text(k+':',x,y);doc.setFont('helvetica','normal');doc.setTextColor(30,30,45);doc.text(String(v),x+60,y);});y+=14;
-    doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(245,166,35);doc.text('RECENT RECORDS',M+5,y+.5);y+=10;
-    const tW=(W-M*2)/7;doc.setFillColor(235,240,255);doc.rect(M,y-4,W-M*2,7,'F');['Date','Today MT','Sand','10mm','20mm','HSD (L)','Status'].forEach((h,i)=>{doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(60,60,80);doc.text(h,M+tW*i+tW/2,y,{align:'center'});});y+=5;
-    reports.slice(0,25).forEach((r,ri)=>{if(y>274){doc.addPage();y=20;}if(ri%2===0){doc.setFillColor(248,250,255);doc.rect(M,y-4,W-M*2,7,'F');}[fd(r.date),r.production.total.toFixed(1),r.production.sand.toFixed(1),r.production['10mm'].toFixed(1),r.production['20mm'].toFixed(1),r.hsd.toLocaleString(),SLBL[r.plantStatus]].forEach((v,i)=>{doc.setFont('helvetica',i===1?'bold':'normal');doc.setFontSize(9);doc.setTextColor(i===1?[180,110,0]:[40,40,55]);doc.text(String(v),M+tW*i+tW/2,y+1,{align:'center'});});y+=6;});
-    const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text(`Pg ${i}/${pg}`,W-M,293,{align:'right'});}
-    doc.save('Dashboard_Report.pdf');toast('📄 Dashboard PDF ready!','ok');
-  }catch(e){console.error('Dash PDF:',e);toast('PDF error: '+e.message,'err');}
+    doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(245,166,35);doc.text('KEY PERFORMANCE INDICATORS',M+5,y+0.5);y+=12;
+    const kw=(W-M*2)/2;
+    const kpis=[['Total Production',Math.round(tot).toLocaleString()+' MT'],['Average Daily',Math.round(avg)+' MT/day'],['Total HSD',hsdT.toLocaleString()+' L'],['Boulders Fed',Math.round(bldT).toLocaleString()+' MT'],['Fuel Efficiency',tot>0?(hsdT/tot).toFixed(2)+' L/MT':'—'],['Conversion',bldT>0?((tot/bldT)*100).toFixed(1)+'%':'—'],['Days Recorded',reports.length],['Breakdown Days',reports.filter(r=>r.plantStatus==='breakdown').length],['Sand',Math.round(sand)+' MT'],['10mm',Math.round(mm10)+' MT'],['20mm',Math.round(mm20)+' MT'],['80mm',Math.round(mm80)+' MT']];
+    kpis.forEach(([k,v],i)=>{if(y>272){doc.addPage();y=20;}const x=i%2===0?M:M+kw;if(i%2===0&&i>0)y+=7;doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(100,100,130);doc.text(String(k)+':',x,y);doc.setFont('helvetica','normal');doc.setTextColor(30,30,45);doc.text(String(v),x+60,y);});y+=14;
+    doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(245,166,35);doc.text('RECENT RECORDS',M+5,y+0.5);y+=10;
+    const tW=(W-M*2)/7;
+    doc.setFillColor(235,240,255);doc.rect(M,y-4,W-M*2,7,'F');
+    ['Date','Today MT','Sand','10mm','20mm','HSD (L)','Status'].forEach((h,i)=>{doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(60,60,80);doc.text(String(h),M+tW*i+tW/2,y,{align:'center'});});y+=5;
+    reports.slice(0,25).forEach((r,ri)=>{if(y>274){doc.addPage();y=20;}if(ri%2===0){doc.setFillColor(248,250,255);doc.rect(M,y-4,W-M*2,7,'F');}[fd(r.date),r.production.total.toFixed(1),r.production.sand.toFixed(1),r.production['10mm'].toFixed(1),r.production['20mm'].toFixed(1),r.hsd.toLocaleString(),SLBL[r.plantStatus]].forEach((v,i)=>{doc.setFont('helvetica',i===1?'bold':'normal');doc.setFontSize(9);doc.setTextColor(i===1?[180,110,0]:[40,40,55]);doc.text(String(v||''),M+tW*i+tW/2,y+1,{align:'center'});});y+=6;});
+    const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}
+    doc.save('Dashboard_Report.pdf');toast('📄 Dashboard PDF ready!','tok');
+  }catch(e){console.error('DashPDF:',e);toast('PDF Error: '+e.message,'ter');}
 }
 
-/* ══════════════ PERIOD PDF ══════════════ */
+/* ══════════════════════════════════════════════════
+   PERIOD PDF
+══════════════════════════════════════════════════ */
 function expRptPDF(){
   try{
-    if(!window.jspdf){toast('PDF library not loaded. Please refresh.','err');return;}
-    const {jsPDF}=window.jspdf;const doc=new jsPDF();const W=210,M=14;
+    if(!window.jspdf){toast('PDF library not loaded.','ter');return;}
+    const jsPDFClass=window.jspdf.jsPDF||window.jspdf;
+    const doc=new jsPDFClass('p','mm','a4');const W=210,M=14;
     const ttls={daily:'DAILY REPORT SUMMARY',monthly:'MONTHLY PRODUCTION REPORT',quarterly:'QUARTERLY REPORT',yearly:'ANNUAL REPORT'};
-    doc.setFillColor(8,13,24);doc.rect(0,0,W,30,'F');doc.setFillColor(245,166,35);doc.rect(0,0,5,30,'F');
-    doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(245,166,35);doc.text(ttls[period]||'PERIOD REPORT',M+4,12);
-    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,160,180);doc.text('Vensar Constructions · '+new Date().toLocaleDateString('en-IN'),M+4,19);
+    doc.setFillColor(8,13,24);doc.rect(0,0,W,30,'F');doc.setFillColor(245,166,35);doc.rect(0,0,5,30,'F');doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(245,166,35);doc.text(ttls[period]||'REPORT',M+4,12);doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,160,180);doc.text('Vensar Constructions · '+new Date().toLocaleDateString('en-IN'),M+4,19);
     let y=36;const groups={};reports.forEach(r=>{const k=grpKey(r);if(!groups[k])groups[k]=[];groups[k].push(r);});
     Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(key=>{
       const g=groups[key];const tot=g.reduce((s,r)=>s+r.production.total,0);const hsd=g.reduce((s,r)=>s+r.hsd,0);const avg=tot/g.length;const fpm=tot>0?hsd/tot:0;
       if(y>240){doc.addPage();y=20;}
-      doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');
-      doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(245,166,35);doc.text(key,M+5,y+.5);
-      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,140,80);doc.text(`${g.length} days · ${Math.round(tot).toLocaleString()} MT · Avg ${Math.round(avg)} · HSD ${hsd.toLocaleString()} L · Fuel ${fpm.toFixed(2)} L/MT`,W-M,y+.5,{align:'right'});y+=10;
-      g.sort((a,b)=>b.date.localeCompare(a.date)).forEach(r=>{if(y>274){doc.addPage();y=20;}doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(40,40,60);doc.text(fd(r.date),M,y);doc.setFont('helvetica','normal');doc.setTextColor(180,110,0);doc.text(r.production.total.toFixed(1)+' MT',M+36,y);doc.setTextColor(60,60,80);doc.text('HSD:'+r.hsd+'L',M+64,y);doc.text(SLBL[r.plantStatus]||'',M+88,y);if(r.remarks){doc.setTextColor(110,110,130);doc.text(r.remarks.substring(0,50)+(r.remarks.length>50?'...':''),M+118,y);}y+=6;});y+=7;
+      doc.setFillColor(17,25,46);doc.rect(M,y-5,W-M*2,8,'F');doc.setFillColor(245,166,35);doc.rect(M,y-5,3,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(245,166,35);doc.text(String(key),M+5,y+0.5);doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(160,140,80);doc.text(g.length+' days · '+Math.round(tot).toLocaleString()+' MT · '+Math.round(avg)+'/day · '+fpm.toFixed(2)+' L/MT',W-M,y+0.5,{align:'right'});y+=10;
+      g.sort((a,b)=>b.date.localeCompare(a.date)).forEach(r=>{if(y>274){doc.addPage();y=20;}doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(40,40,60);doc.text(fd(r.date),M,y);doc.setFont('helvetica','normal');doc.setTextColor(180,110,0);doc.text(r.production.total.toFixed(1)+' MT',M+36,y);doc.setTextColor(60,60,80);doc.text('HSD:'+r.hsd+'L',M+64,y);doc.text(SLBL[r.plantStatus]||'',M+88,y);if(r.remarks){doc.setTextColor(110,110,130);doc.text(r.remarks.substring(0,45)+(r.remarks.length>45?'...':''),M+118,y);}y+=6;});y+=7;
     });
-    const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text(`Pg ${i}/${pg}`,W-M,293,{align:'right'});}
-    doc.save(`${period}_report.pdf`);toast('📄 Report PDF ready!','ok');
-  }catch(e){console.error('Rpt PDF:',e);toast('PDF error: '+e.message,'err');}
+    const pg=doc.getNumberOfPages();for(let i=1;i<=pg;i++){doc.setPage(i);doc.setFillColor(8,13,24);doc.rect(0,285,W,12,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,160);doc.text('Vensar Constructions · CrusherOS · CONFIDENTIAL',M+4,293);doc.text('Pg '+i+'/'+pg,W-M,293,{align:'right'});}
+    doc.save(period+'_report.pdf');toast('📄 Report PDF ready!','tok');
+  }catch(e){console.error('RptPDF:',e);toast('PDF Error: '+e.message,'ter');}
 }
 
-/* ══════════════ DATA MANAGEMENT ══════════════ */
-function openDM(){document.getElementById('dmSt').textContent=`${reports.length} reports · ~${Math.round(JSON.stringify(reports).length/1024)} KB · ${milestones.length} milestones · Folder: ${DS.dir?DS.dir.name:'Not set'}`;openMo('dmMo');}
-function updStBanner(){const sb=document.getElementById('stBanner');if(!sb)return;if(DS.dir){sb.style.display='flex';document.getElementById('stPath').textContent='📁 '+DS.dir.name+'/'+DS.FILE;}else sb.style.display='none';}
-async function chooseFoldr(){closeMo('dmMo');await DS.chooseDir();updStBanner();}
-async function saveFoldr(){await DS.saveDir();}
-function exportJSON(){const b=new Blob([JSON.stringify({reports,milestones},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`CrusherBackup_${new Date().toISOString().split('T')[0]}.json`;a.click();URL.revokeObjectURL(a.href);toast('📤 Exported!','ok');}
-function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d.reports&&Array.isArray(d.reports)){reports=d.reports;if(d.milestones&&Array.isArray(d.milestones))milestones=d.milestones;}else if(Array.isArray(d)){reports=d;}else throw new Error('Invalid format');DS.save(reports);DS.saveM(milestones);closeMo('dmMo');toast(`📥 Imported ${reports.length} reports!`,'ok');}catch{toast('Invalid JSON file.','err');}};r.readAsText(f);e.target.value='';}
-
-/* ══════════════ MODALS ══════════════ */
+/* ══════════════════════════════════════════════════
+   MODALS & TOAST
+══════════════════════════════════════════════════ */
 function openMo(id){document.getElementById(id).classList.add('open');}
 function closeMo(id){document.getElementById(id).classList.remove('open');}
 function showConfirm(icon,msg,sub,ok,fn){document.getElementById('cfIc').textContent=icon;document.getElementById('cfMsg').textContent=msg;document.getElementById('cfSub').innerHTML=sub;const btn=document.getElementById('cfOk');btn.textContent=ok;btn.onclick=()=>{closeMo('cfMo');fn();};openMo('cfMo');}
+function toast(msg,type='tok'){const c=document.getElementById('toastWrap');const t=document.createElement('div');const icons={tok:'✅',ter:'❌',tin:'ℹ️',wrn:'⚠️'};t.className='toast '+type;t.innerHTML='<span>'+icons[type]+'</span> '+SEC.san(msg);c.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),350);},3500);}
 
-/* ══════════════ TOAST ══════════════ */
-function toast(msg,type='ok'){const c=document.getElementById('toastWrap');const t=document.createElement('div');const icons={ok:'✅',err:'❌',ok_inf:'ℹ️',wrn:'⚠️'};t.className=`toast t${type}`;t.innerHTML=`<span>${icons[type]||'•'}</span> ${SEC.san(msg)}`;c.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),350);},3500);}
-
-/* ══════════════ HELPERS ══════════════ */
+/* ══════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════ */
 const fd=d=>!d?'—':new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
 const fds=d=>!d?'':new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'});
-const fdt=ts=>ts?new Date(ts).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+const fdt=ts=>{try{return ts?new Date(ts).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';}catch{return'—';}};
 </script>
 </body>
 </html>
