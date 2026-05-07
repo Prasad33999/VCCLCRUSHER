@@ -1,0 +1,423 @@
+[
+  {
+    "id": 1778043967724,
+    "date": "2026-05-05",
+    "shift": "Both",
+    "site": "TT12-P1",
+    "preparedBy": "Sivaprasad",
+    "plant120": {
+      "day": 0,
+      "night": 0,
+      "breakdown": 24
+    },
+    "plant150": {
+      "day": 7.5,
+      "night": 6.9,
+      "breakdown": 0
+    },
+    "boulders": {
+      "collectedTrips": 20,
+      "collectedMT": 357,
+      "feedingTrips": 42,
+      "feedingMT": 598
+    },
+    "production": {
+      "sand": 239,
+      "10mm": 239,
+      "20mm": 0,
+      "80mm": 0,
+      "total": 478
+    },
+    "shifted": {
+      "Sand": {
+        "p1": 120,
+        "adit": 120,
+        "p2": 27,
+        "tupul": 0,
+        "total": 267
+      },
+      "10mm": {
+        "p1": 48,
+        "adit": 63,
+        "p2": 58,
+        "tupul": 0,
+        "total": 169
+      },
+      "20mm": {
+        "p1": 0,
+        "adit": 27,
+        "p2": 0,
+        "tupul": 13,
+        "total": 40
+      },
+      "80mm": {
+        "p1": 0,
+        "adit": 0,
+        "p2": 0,
+        "tupul": 0,
+        "total": 0
+      },
+      "Boulder": {
+        "p1": 0,
+        "adit": 598,
+        "p2": 0,
+        "tupul": 0,
+        "total": 598
+      }
+    },
+    "vehicles": {
+      "excavators": 4,
+      "tippers": 4,
+      "loaders": 1
+    },
+    "hsd": 830,
+    "breakingTrips": 20,
+    "plantStatus": "running",
+    "remarks": "120 Tph Plant Breakdown Due to Gizzly Motor damage.",
+    "createdBy": "Employee",
+    "createdAt": "2026-05-06T05:06:07.724Z",
+    "changelog": [
+      {
+        "ts": "2026-05-06T14:48:21.122Z",
+        "by": "Employee",
+        "reason": "Wrongly Mentioned Date.",
+        "changes": [
+          {
+            "label": "Date",
+            "from": "2026-05-06",
+            "to": "2026-05-05"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1777956776069,
+    "date": "2026-05-04",
+    "shift": "Both",
+    "site": "TT12-P1",
+    "preparedBy": "Sivaprasad",
+    "plant120": {
+      "day": 6.5,
+      "night": 4.1,
+      "breakdown": 13
+    },
+    "plant150": {
+      "day": 0,
+      "night": 0,
+      "breakdown": 24
+    },
+    "boulders": {
+      "collectedTrips": 20,
+      "collectedMT": 383,
+      "feedingTrips": 35,
+      "feedingMT": 512
+    },
+    "production": {
+      "sand": 154,
+      "10mm": 128,
+      "20mm": 128,
+      "80mm": 0,
+      "total": 410
+    },
+    "shifted": {
+      "Sand": {
+        "p1": 36,
+        "adit": 136,
+        "p2": 0,
+        "tupul": 21,
+        "total": 193
+      },
+      "10mm": {
+        "p1": 72,
+        "adit": 64,
+        "p2": 0,
+        "tupul": 15,
+        "total": 151
+      },
+      "20mm": {
+        "p1": 60,
+        "adit": 27,
+        "p2": 81,
+        "tupul": 41,
+        "total": 209
+      },
+      "80mm": {
+        "p1": 0,
+        "adit": 0,
+        "p2": 0,
+        "tupul": 0,
+        "total": 0
+      },
+      "Boulder": {
+        "p1": 0,
+        "adit": 512,
+        "p2": 0,
+        "tupul": 0,
+        "total": 512
+      }
+    },
+    "vehicles": {
+      "excavators": 4,
+      "tippers": 4,
+      "loaders": 1
+    },
+    "hsd": 1000,
+    "breakingTrips": 20,
+    "plantStatus": "running",
+    "remarks": "Night Shift 120 TPH  Crusher Plant Breakdown due to Grizzly Motor damaged.\n150 Crusher Plant Breakdown due to Conveyor Gearbox damaged.",
+    "createdBy": "Employee",
+    "createdAt": "2026-05-05T04:52:56.069Z",
+    "changelog": []
+  },
+  {
+    "id": 1777956527430,
+    "date": "2026-05-03",
+    "shift": "Both",
+    "site": "TT12-P1",
+    "preparedBy": "Sivaprasad",
+    "plant120": {
+      "day": 5.1,
+      "night": 7.3,
+      "breakdown": 0
+    },
+    "plant150": {
+      "day": 0,
+      "night": 0,
+      "breakdown": 24
+    },
+    "boulders": {
+      "collectedTrips": 12,
+      "collectedMT": 186,
+      "feedingTrips": 36,
+      "feedingMT": 510
+    },
+    "production": {
+      "sand": 153,
+      "10mm": 128,
+      "20mm": 128,
+      "80mm": 0,
+      "total": 409
+    },
+    "shifted": {
+      "Sand": {
+        "p1": 48,
+        "adit": 86,
+        "p2": 10,
+        "tupul": 13,
+        "total": 157
+      },
+      "10mm": {
+        "p1": 24,
+        "adit": 81,
+        "p2": 28,
+        "tupul": 0,
+        "total": 133
+      },
+      "20mm": {
+        "p1": 24,
+        "adit": 0,
+        "p2": 29,
+        "tupul": 55,
+        "total": 108
+      },
+      "80mm": {
+        "p1": 0,
+        "adit": 0,
+        "p2": 0,
+        "tupul": 0,
+        "total": 0
+      },
+      "Boulder": {
+        "p1": 0,
+        "adit": 510,
+        "p2": 0,
+        "tupul": 0,
+        "total": 510
+      }
+    },
+    "vehicles": {
+      "excavators": 4,
+      "tippers": 4,
+      "loaders": 1
+    },
+    "hsd": 1090,
+    "breakingTrips": 15,
+    "plantStatus": "running",
+    "remarks": "150 Tph Plant breakdown due to Conveyor Gearbox = 01 Nos Damage.",
+    "createdBy": "Employee",
+    "createdAt": "2026-05-05T04:48:47.431Z",
+    "changelog": [
+      {
+        "ts": "2026-05-05T04:56:04.477Z",
+        "by": "Employee",
+        "reason": "Remarks Updated",
+        "changes": [
+          {
+            "label": "Remarks",
+            "from": "150 Tph Plant breakdown due to Conveyor Gearbox = 01 No&#39;s Damage.",
+            "to": "150 Tph Plant breakdown due to Conveyor Gearbox = 01 Nos Damage."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1777956184004,
+    "date": "2026-05-02",
+    "shift": "Both",
+    "site": "TT12-P1",
+    "preparedBy": "Sivaprasad",
+    "plant120": {
+      "day": 4.5,
+      "night": 4.3,
+      "breakdown": 0
+    },
+    "plant150": {
+      "day": 0,
+      "night": 0,
+      "breakdown": 0
+    },
+    "boulders": {
+      "collectedTrips": 22,
+      "collectedMT": 350,
+      "feedingTrips": 28,
+      "feedingMT": 368
+    },
+    "production": {
+      "sand": 110,
+      "10mm": 92,
+      "20mm": 92,
+      "80mm": 0,
+      "total": 294
+    },
+    "shifted": {
+      "Sand": {
+        "p1": 0,
+        "adit": 134,
+        "p2": 0,
+        "tupul": 12,
+        "total": 146
+      },
+      "10mm": {
+        "p1": 24,
+        "adit": 0,
+        "p2": 24,
+        "tupul": 0,
+        "total": 48
+      },
+      "20mm": {
+        "p1": 0,
+        "adit": 26,
+        "p2": 39,
+        "tupul": 13,
+        "total": 78
+      },
+      "80mm": {
+        "p1": 0,
+        "adit": 0,
+        "p2": 0,
+        "tupul": 14,
+        "total": 14
+      },
+      "Boulder": {
+        "p1": 0,
+        "adit": 368,
+        "p2": 0,
+        "tupul": 0,
+        "total": 368
+      }
+    },
+    "vehicles": {
+      "excavators": 4,
+      "tippers": 4,
+      "loaders": 1
+    },
+    "hsd": 1025,
+    "breakingTrips": 22,
+    "plantStatus": "running",
+    "remarks": "Due to Heavy Rainfall 4 Hours Idle ",
+    "createdBy": "Employee",
+    "createdAt": "2026-05-05T04:43:04.004Z",
+    "changelog": []
+  },
+  {
+    "id": 1777955900125,
+    "date": "2026-05-01",
+    "shift": "Both",
+    "site": "TT12-P1",
+    "preparedBy": "Sivaprasad",
+    "plant120": {
+      "day": 5.4,
+      "night": 3.5,
+      "breakdown": 0
+    },
+    "plant150": {
+      "day": 0,
+      "night": 3.2,
+      "breakdown": 0
+    },
+    "boulders": {
+      "collectedTrips": 20,
+      "collectedMT": 326,
+      "feedingTrips": 41,
+      "feedingMT": 542
+    },
+    "production": {
+      "sand": 170,
+      "10mm": 147,
+      "20mm": 117,
+      "80mm": 0,
+      "total": 434
+    },
+    "shifted": {
+      "Sand": {
+        "p1": 72,
+        "adit": 84,
+        "p2": 24,
+        "tupul": 10,
+        "total": 190
+      },
+      "10mm": {
+        "p1": 48,
+        "adit": 63,
+        "p2": 0,
+        "tupul": 91,
+        "total": 202
+      },
+      "20mm": {
+        "p1": 24,
+        "adit": 51,
+        "p2": 50,
+        "tupul": 26,
+        "total": 151
+      },
+      "80mm": {
+        "p1": 0,
+        "adit": 0,
+        "p2": 0,
+        "tupul": 0,
+        "total": 0
+      },
+      "Boulder": {
+        "p1": 0,
+        "adit": 542,
+        "p2": 0,
+        "tupul": 0,
+        "total": 542
+      }
+    },
+    "vehicles": {
+      "excavators": 4,
+      "tippers": 4,
+      "loaders": 1
+    },
+    "hsd": 1420,
+    "breakingTrips": 25,
+    "plantStatus": "running",
+    "remarks": "",
+    "createdBy": "Employee",
+    "createdAt": "2026-05-05T04:38:20.125Z",
+    "changelog": []
+  }
+]
