@@ -417,7 +417,7 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
     <span class="tb-dt" id="topDt"></span>
     <div class="sync-badge" id="syncBadge"><span class="sync-dot" id="syncDot"></span><span id="syncTxt">Connected</span></div>
     <span class="tb-usr" id="tUsr"></span>
-    <button class="ib" onclick="openSetupModal()">🗄</button>
+    
     <button class="ib" onclick="toggleTheme()" id="thBtn">☀</button>
     <button class="ib" onclick="doLogout()">⏻</button>
   </div>
@@ -825,7 +825,7 @@ function showPage(n){
   if(n==='dashboard')renderDash();
   if(n==='reports'){populateOfcDates();renderRpt();}
 }
-function toggleTheme(){const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');document.getElementById('thBtn').textContent=d?'☽':'☀';setTimeout(()=>{if(document.getElementById('page-dashboard').classList.contains('active'))renderDash();},80);}
+function toggleTheme(){const h=document.documentElement,d=h.getAttribute('data-theme')==='light';h.setAttribute('data-theme',d?'light':'dark');document.getElementById('thBtn').textContent=d?'☽':'☀';setTimeout(()=>{if(document.getElementById('page-dashboard').classList.contains('active'))renderDash();},80);}
 
 /* ══════════════════════════════════════════════════
    FORM
