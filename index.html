@@ -825,7 +825,7 @@ function showPage(n){
   if(n==='dashboard')renderDash();
   if(n==='reports'){populateOfcDates();renderRpt();}
 }
-function toggleTheme(){const h=document.documentElement,d=h.getAttribute('data-theme')==='light';h.setAttribute('data-theme',d?'light':'dark');document.getElementById('thBtn').textContent=d?'☽':'☀';setTimeout(()=>{if(document.getElementById('page-dashboard').classList.contains('active'))renderDash();},80);}
+function toggleTheme(){const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');document.getElementById('thBtn').textContent=d?'☽':'☀';setTimeout(()=>{if(document.getElementById('page-dashboard').classList.contains('active'))renderDash();},80);}
 
 /* ══════════════════════════════════════════════════
    FORM
