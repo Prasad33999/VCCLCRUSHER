@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CrusherOS · Vensar Constructions</title>
+<title>CrusherVCCL · Vensar Constructions</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -512,7 +512,7 @@ tbody td:first-child{color:var(--t1);font-weight:700;}
 <!-- LOADING -->
 <div id="loadScreen">
   <div class="ld-logo">CP</div>
-  <div class="ld-name">CrusherOS</div>
+  <div class="ld-name">CrusherVCCL</div>
   <div class="ld-sub" id="ldSub">Initialising system...</div>
   <div class="ld-spin"></div>
   <div class="ld-progress"><div class="ld-fill" id="ldFill"></div></div>
@@ -594,7 +594,7 @@ CREATE POLICY "allow_all" ON public.crusher_reports
   <div class="tb-l">
     <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
     <div class="tb-ic">CP</div>
-    <div><div class="tb-name">CrusherOS</div><div class="tb-sub">NF Railway Tunnel — Manipur</div></div>
+    <div><div class="tb-name">CrusherVCCL</div><div class="tb-sub">NF Railway Tunnel — Manipur</div></div>
   </div>
   <nav class="tb-nav" id="nav"></nav>
   <div class="tb-r">
@@ -611,7 +611,7 @@ CREATE POLICY "allow_all" ON public.crusher_reports
 <div class="mobile-drawer" id="mobileDrawer">
   <div class="md-header">
     <div class="tb-ic" style="flex-shrink:0">CP</div>
-    <div><div style="font-size:14px;font-weight:800;color:var(--t1)">CrusherOS</div><div style="font-family:var(--m);font-size:9px;color:var(--t3);letter-spacing:1px;">NF RAILWAY · MANIPUR</div></div>
+    <div><div style="font-size:14px;font-weight:800;color:var(--t1)">CrusherVCCL</div><div style="font-family:var(--m);font-size:9px;color:var(--t3);letter-spacing:1px;">NF RAILWAY · MANIPUR</div></div>
   </div>
   <div class="md-nav" id="mobileNav"></div>
   <div class="md-footer">
@@ -749,7 +749,7 @@ CREATE POLICY "allow_all" ON public.crusher_reports
 </div></div></div>
 
 <!-- OFFICIAL REPORT -->
-<div class="mo-bg" id="ofcMo"><div class="mbox wide"><div class="mhdr"><div class="mttl">📋 Generate Official Daily Progress Report</div><button class="mcl" onclick="closeMo('ofcMo')">✕</button></div><div class="mbody">
+<div class="mo-bg" id="ofcMo"><div class="mbox wide"><div class="mhdr"><div class="mttl">📋 Generate Report Here</div><button class="mcl" onclick="closeMo('ofcMo')">✕</button></div><div class="mbody">
  <!-- <div class="ofc-info">Generates the official Vensar Constructions report matching the exact company format. Select the report date and period start to calculate cumulative totals.</div>-->
   <div class="ofc-grid">
     <div><div class="fl">Report Date</div><select id="ofcDate" style="width:100%"></select></div>
@@ -1696,7 +1696,7 @@ function buildOfficialPDF(rec,periodFrom,rptDate,cumTot,cumBld,sb2,site,prepBy){
     });
 
     doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(120,130,160);
-    doc.text('CrusherOS · Vensar Constructions Pvt Ltd · CONFIDENTIAL',ML+2,PH-MT-1);
+    doc.text('CrusherVCCL · Vensar Constructions Pvt Ltd · CONFIDENTIAL',ML+2,PH-MT-1);
     doc.text('Generated: '+new Date().toLocaleString('en-IN'),PW-ML,PH-MT-1,{align:'right'});
     doc.save('OfficialReport_'+rptDate+'_'+site+'.pdf');
     toast('✅ Official PDF generated!','tok');
