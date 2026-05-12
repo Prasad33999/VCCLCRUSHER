@@ -750,21 +750,21 @@ CREATE POLICY "allow_all" ON public.crusher_reports
 
 <!-- OFFICIAL REPORT -->
 <div class="mo-bg" id="ofcMo"><div class="mbox wide"><div class="mhdr"><div class="mttl">📋 Generate Official Daily Progress Report</div><button class="mcl" onclick="closeMo('ofcMo')">✕</button></div><div class="mbody">
-  <div class="ofc-info">Generates the official Vensar Constructions report matching the exact company format. Select the report date and period start to calculate cumulative totals.</div>
+ <!-- <div class="ofc-info">Generates the official Vensar Constructions report matching the exact company format. Select the report date and period start to calculate cumulative totals.</div>-->
   <div class="ofc-grid">
     <div><div class="fl">Report Date</div><select id="ofcDate" style="width:100%"></select></div>
     <div><div class="fl">Period Start</div><input type="date" id="ofcFrom"></div>
     <div><div class="fl">Site</div><select id="ofcSite"><option value="TT12-P1">TT12-P1 IMPHAL</option><option value="ADIT-1">ADIT-1</option><option value="MAIN-P2">MAIN P2</option><option value="T28-TUPUL">T28 TUPUL</option></select></div>
     <div><div class="fl">Prepared By</div><input type="text" id="ofcPrepBy" placeholder="Engineer name"></div>
   </div>
-  <div style="font-family:var(--m);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-weight:600;">Override Stock Balance (0 = use saved values)</div>
+ <!-- <div style="font-family:var(--m);font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-weight:600;">Override Stock Balance (0 = use saved values)</div>
   <div class="ofc-bal-grid">
     <div class="fu"><div class="fl">Sand (MT)</div><input type="number" id="obSand" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
     <div class="fu"><div class="fl">10mm (MT)</div><input type="number" id="ob10" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
     <div class="fu"><div class="fl">20mm (MT)</div><input type="number" id="ob20" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
     <div class="fu"><div class="fl">80mm (MT)</div><input type="number" id="ob80" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
     <div class="fu"><div class="fl">Boulder (MT)</div><input type="number" id="obBld" step="0.01" min="0" placeholder="0.00"><span class="fu-t">MT</span></div>
-  </div>
+  </div>-->
   <div class="fac"><button class="btn bg" onclick="closeMo('ofcMo')">Cancel</button><button class="btn bp" onclick="genOfficialPDF()">📄 Generate PDF</button></div>
 </div></div></div>
 
